@@ -12,7 +12,7 @@ import {
 } from "./EmblaCarouselArrowButtons";
 import Autoplay from "embla-carousel-autoplay";
 import "./carousel.styles.scss";
-import { MediaItem } from "@/api/fetchMovieData";
+import { MediaItem } from "@/app/api/fetchMovieData";
 // import imageByIndex from "./imageByIndex";
 
 type PropType = {
@@ -47,7 +47,7 @@ const Carousel: React.FC<PropType> = (props) => {
   } = usePrevNextButtons(emblaApi, onButtonClick);
 
   return (
-    <div className="embla">
+    <div className="embla relative">
       <div className="embla__viewport" ref={emblaRef}>
         <div className="embla__container">
           {slides.map((index) => {
@@ -64,21 +64,20 @@ const Carousel: React.FC<PropType> = (props) => {
                   alt="HomeCarousel"
                 />
                 <div className="info absolute bottom-0 w-full card-styles">
-                  <div className="grid grid-flow-col gap-3 items-end justify-center w-2/3 mx-10">
-                    <Image
+                  <div className=" flex flex-row justify-start items-end  w-full gap-8">
+                    <img
                       alt="Card background"
-                      className="object-cover rounded-xl flex-col"
+                      className=" rounded-xl card-img ml-5"
                       src={`https://image.tmdb.org/t/p/original${
                         dataByIndex(index).poster_path
                       }`}
-                      width={270}
                     />
                     <div className=" gap-4 grid-flow-row grid">
-                      <h4 className="font-bold text-2xl">
+                      <h4 className="font-bold  text-sm xl:text-xl ">
                         {dataByIndex(index).title || dataByIndex(index).name}
                       </h4>
-                      <p className=" text-clip">
-                        {dataByIndex(index).overview}
+                      <p className=" text-clip hidden xl:block ">
+                        {dataByIndex(index).overview.substring(0, 200)}...
                       </p>
                       <p>
                         <span className=" font-bold text-lg">
@@ -95,12 +94,12 @@ const Carousel: React.FC<PropType> = (props) => {
         </div>
       </div>
 
-      <div className="embla__buttons">
+      <div className="embla__buttons hidden xl:block">
         <PrevButton onClick={onPrevButtonClick} disabled={prevBtnDisabled} />
         <NextButton onClick={onNextButtonClick} disabled={nextBtnDisabled} />
       </div>
 
-      <div className="embla__dots">
+      <div className="embla__dots ">
         {scrollSnaps.map((_, index) => (
           <DotButton
             key={index}

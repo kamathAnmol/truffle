@@ -1,32 +1,26 @@
 "use client";
 
-import React from "react";
 import {
   Navbar,
   NavbarBrand,
   NavbarContent,
   NavbarItem,
   Link,
-  Button,
   NavbarMenu,
   NavbarMenuItem,
   NavbarMenuToggle,
 } from "@nextui-org/react";
 import "./navbar.styles.scss";
-export default function NavbarComponent() {
-  const menuItems = [
-    "Profile",
-    "Dashboard",
-    "Activity",
-    "Analytics",
-    "System",
-    "Deployments",
-    "My Settings",
-    "Team Settings",
-    "Help & Feedback",
-    "Log Out",
-  ];
 
+import LoginBtn from "../loginBtn/loginBtn";
+import RegisterBtn from "../registerBtn/registerBtn";
+import { useSelector } from "react-redux";
+import { selectCurrentUser } from "@/store/root-reducer";
+import SignOutBtn from "../signOutBtn/signOutBtn";
+import SearchBar from "../searchBar/searchbar";
+export default function NavbarComponent() {
+  const menuItems = ["Profile", "Home", "Movies", "Shows", "Log Out"];
+  const user = useSelector(selectCurrentUser);
   return (
     <Navbar disableAnimation isBordered>
       <NavbarContent className="sm:hidden" justify="start">
@@ -65,13 +59,22 @@ export default function NavbarComponent() {
       </NavbarContent>
 
       <NavbarContent justify="end">
-        <NavbarItem className="hidden lg:flex">
-          <Link href="Login">Login</Link>
-        </NavbarItem>
+        {user ? (
+          <NavbarItem>
+            <SignOutBtn />
+          </NavbarItem>
+        ) : (
+          <>
+            <NavbarItem className="hidden lg:flex">
+              <LoginBtn></LoginBtn>
+            </NavbarItem>
+            <NavbarItem>
+              <RegisterBtn></RegisterBtn>
+            </NavbarItem>
+          </>
+        )}
         <NavbarItem>
-          <Button as={Link} color="warning" href="/register" variant="flat">
-            Sign Up
-          </Button>
+          <SearchBar></SearchBar>
         </NavbarItem>
       </NavbarContent>
 
