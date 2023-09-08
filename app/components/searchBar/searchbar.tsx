@@ -17,7 +17,6 @@ import debounce from "loadsh/debounce";
 import { search, MediaItem } from "@/app/api/fetchData";
 
 const SearchBar = () => {
-  const [isVisible, setIsVisible] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [seachResults, setSearchResults] = useState<MediaItem[]>([]);
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
@@ -37,7 +36,8 @@ const SearchBar = () => {
         onOpenChange={onOpenChange}
         scrollBehavior={"inside"}
         size="5xl"
-        placement="bottom-center"
+        placement="top-center"
+        backdrop="blur"
       >
         <ModalContent>
           {(onClose) => (

@@ -5,7 +5,7 @@ import { RadioGroup, Radio, cn, RadioProps } from "@nextui-org/react";
 import "./styles.scss";
 import LongCard from "@/app/components/longCard/longCard";
 
-export const CustomRadio = (props: RadioProps) => {
+const VerticalCustomRadio = (props: RadioProps) => {
   const { children, ...otherProps } = props;
 
   return (
@@ -15,7 +15,25 @@ export const CustomRadio = (props: RadioProps) => {
         base: cn(
           "inline-flex m-0 bg-content1 hover:bg-content2 items-center justify-between",
           "flex-row-reverse max-w-[300px] cursor-pointer rounded-lg gap-4 p-4 border-2 border-transparent",
-          "data-[selected=true]:border-primary"
+          "data-[selected=true]:border-primary z-100"
+        ),
+      }}
+    >
+      {children}
+    </Radio>
+  );
+};
+const HorizontalCustomRadio = (props: RadioProps) => {
+  const { children, ...otherProps } = props;
+
+  return (
+    <Radio
+      {...otherProps}
+      classNames={{
+        base: cn(
+          "inline-flex m-0 bg-content1 hover:bg-content2 items-center justify-between",
+          "flex-row-reverse max-w-[300px] cursor-pointer rounded-lg gap-4 p-4 border-2 border-transparent",
+          "data-[selected=true]:border-primary z-100"
         ),
       }}
     >
@@ -27,7 +45,7 @@ export const CustomRadio = (props: RadioProps) => {
 const SearchPage = ({ params }: { params: { query: string } }) => {
   const [selected, setSelected] = useState("multi");
   const [searchResults, setSearchResults] = useState<MediaItem[]>([]);
-  const query = params.query;
+  const query = new String(params.query).replace("%20", " ");
   useEffect(() => {
     const updateSearch = async () => {
       setSearchResults(await search(selected, query));
@@ -35,20 +53,33 @@ const SearchPage = ({ params }: { params: { query: string } }) => {
     updateSearch();
   }, [selected]);
   return (
-    <div className=" mx-auto w-10/12 search-container grid ">
+    <div className=" mx-auto w-10/12 search-container block md:grid py-16">
       <RadioGroup
         label="Select Category"
         value={selected}
         onValueChange={setSelected}
         defaultValue="multi"
-        className="fixed w-1/5"
+        className="fixed w-1/5 hidden md:block"
       >
-        <CustomRadio value="multi">All</CustomRadio>
-        <CustomRadio value="movie">Movies</CustomRadio>
-        <CustomRadio value="tv">Tv Shows</CustomRadio>
-        <CustomRadio value="person">Person</CustomRadio>
+        <VerticalCustomRadio value="multi">All</VerticalCustomRadio>
+        <VerticalCustomRadio value="movie">Movies</VerticalCustomRadio>
+        <VerticalCustomRadio value="tv">Tv Shows</VerticalCustomRadio>
+        <VerticalCustomRadio value="person">Person</VerticalCustomRadio>
       </RadioGroup>
-      <div></div>
+      <RadioGroup
+        label="Select Category"
+        value={selected}
+        onValueChange={setSelected}
+        defaultValue="multi"
+        orientation="horizontal"
+        className=" w-full block md:hidden fixed bg-black/80  backdrop-blur-lg  top-16 py-6"
+      >
+        <HorizontalCustomRadio value="multi">All</HorizontalCustomRadio>
+        <HorizontalCustomRadio value="movie">Movies</HorizontalCustomRadio>
+        <HorizontalCustomRadio value="tv">Tv Shows</HorizontalCustomRadio>
+        <HorizontalCustomRadio value="person">Person</HorizontalCustomRadio>
+      </RadioGroup>
+      <div className="h-16"></div>
       {selected === "multi" && (
         <div>
           {searchResults.filter((item) => item.media_type === "movie").length >
@@ -59,7 +90,7 @@ const SearchPage = ({ params }: { params: { query: string } }) => {
                 {searchResults
                   .filter((item) => item.media_type === "movie")
                   .map((item) => {
-                    return <LongCard item={item}></LongCard>;
+                    return <LongCard item={item} key={item.id}></LongCard>;
                   })}
               </div>
             </>
@@ -72,7 +103,7 @@ const SearchPage = ({ params }: { params: { query: string } }) => {
                 {searchResults
                   .filter((item) => item.media_type === "tv")
                   .map((item) => {
-                    return <LongCard item={item}></LongCard>;
+                    return <LongCard item={item} key={item.id}></LongCard>;
                   })}
               </div>
             </>
@@ -85,16 +116,43 @@ const SearchPage = ({ params }: { params: { query: string } }) => {
                 {searchResults
                   .filter((item) => item.media_type === "person")
                   .map((item) => {
-                    return <LongCard item={item}></LongCard>;
+                    return <LongCard item={item} key={item.id}></LongCard>;
                   })}
               </div>
             </>
           )}
         </div>
       )}
-      {selected === "movie" && <div>Movies</div>}
-      {selected === "tv" && <div>Shows</div>}
-      {selected === "person" && <div>Persons</div>}
+      {selected === "movie" && (
+        <div>
+          <h1 className=" capitalize font-bold text-4xl my-7">Movies</h1>
+          <div className="flex flex-col gap-3">
+            {searchResults.map((item) => {
+              return <LongCard item={item} key={item.id}></LongCard>;
+            })}
+          </div>
+        </div>
+      )}
+      {selected === "tv" && (
+        <div>
+          <h1 className=" capitalize font-bold text-4xl my-7">Tv Shows</h1>
+          <div className="flex flex-col gap-3">
+            {searchResults.map((item) => {
+              return <LongCard item={item} key={item.id}></LongCard>;
+            })}
+          </div>
+        </div>
+      )}
+      {selected === "person" && (
+        <div>
+          <h1 className=" capitalize font-bold text-4xl my-7">People</h1>
+          <div className="flex flex-col gap-3">
+            {searchResults.map((item) => {
+              return <LongCard item={item} key={item.id}></LongCard>;
+            })}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
