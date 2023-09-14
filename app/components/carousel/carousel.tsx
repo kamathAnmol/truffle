@@ -4,7 +4,6 @@ import useEmblaCarousel, {
   EmblaCarouselType,
 } from "embla-carousel-react";
 import { DotButton, useDotButton } from "./EmblaCarouselDotButton";
-import { Card, CardHeader, CardBody, Image } from "@nextui-org/react";
 import {
   PrevButton,
   NextButton,
@@ -12,11 +11,12 @@ import {
 } from "./EmblaCarouselArrowButtons";
 import Autoplay from "embla-carousel-autoplay";
 import "./carousel.styles.scss";
-import { MediaItem } from "@/app/api/fetchMovieData";
+import { MediaItem, detailsType } from "@/app/api/fetchData";
+import Link from "next/link";
 // import imageByIndex from "./imageByIndex";
 
 type PropType = {
-  data: MediaItem[];
+  data: detailsType[] | MediaItem[];
 };
 
 const Carousel: React.FC<PropType> = (props) => {
@@ -25,7 +25,8 @@ const Carousel: React.FC<PropType> = (props) => {
   const slides: number[] = Array.from(Array(SLIDE_COUNT).keys());
   const emblaOptions: EmblaOptionsType = { loop: true };
 
-  const dataByIndex = (index: number): MediaItem => data[index % data.length];
+  const dataByIndex = (index: number): MediaItem | detailsType =>
+    data[index % data.length];
   const [emblaRef, emblaApi] = useEmblaCarousel(emblaOptions, [Autoplay()]);
 
   const onButtonClick = useCallback((emblaApi: EmblaCarouselType) => {
@@ -59,35 +60,42 @@ const Carousel: React.FC<PropType> = (props) => {
                 <img
                   className="embla__slide__img"
                   src={`https://image.tmdb.org/t/p/original${
-                    dataByIndex(index).backdrop_path
+                    dataByIndex(index)?.backdrop_path
                   }`}
                   alt="HomeCarousel"
                 />
-                <div className="info absolute bottom-0 w-full card-styles">
-                  <div className=" flex flex-row justify-start items-end  w-full gap-8">
-                    <img
-                      alt="Card background"
-                      className=" rounded-xl card-img ml-5"
-                      src={`https://image.tmdb.org/t/p/original${
-                        dataByIndex(index).poster_path
-                      }`}
-                    />
-                    <div className=" gap-4 grid-flow-row grid">
-                      <h4 className="font-bold  text-sm xl:text-xl ">
-                        {dataByIndex(index).title || dataByIndex(index).name}
-                      </h4>
-                      <p className=" text-clip hidden xl:block ">
-                        {dataByIndex(index).overview.substring(0, 200)}...
-                      </p>
-                      <p>
-                        <span className=" font-bold text-lg">
-                          {dataByIndex(index).vote_average.toFixed(1)}
-                        </span>
-                        /10
-                      </p>
+                <Link
+                  href={`/details/${dataByIndex(index)?.media_type}/${
+                    dataByIndex(index)?.id
+                  }`}
+                >
+                  <div className="info absolute bottom-0 w-full card-styles">
+                    <div className=" flex flex-row justify-start items-end  w-full gap-8">
+                      <img
+                        alt="Card background"
+                        className=" rounded-xl card-img ml-5"
+                        src={`https://image.tmdb.org/t/p/original${
+                          dataByIndex(index)?.poster_path
+                        }`}
+                      />
+                      <div className=" gap-4 grid-flow-row grid">
+                        <h4 className="font-bold  text-sm xl:text-xl ">
+                          {dataByIndex(index)?.title ||
+                            dataByIndex(index)?.name}
+                        </h4>
+                        <p className=" text-clip hidden xl:block ">
+                          {dataByIndex(index)?.overview.substring(0, 200)}...
+                        </p>
+                        <p>
+                          <span className=" font-bold text-lg">
+                            {dataByIndex(index)?.vote_average.toFixed(1)}
+                          </span>
+                          /10
+                        </p>
+                      </div>
                     </div>
                   </div>
-                </div>
+                </Link>
               </div>
             );
           })}

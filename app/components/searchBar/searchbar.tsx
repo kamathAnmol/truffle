@@ -15,6 +15,7 @@ import {
 } from "@nextui-org/react";
 import debounce from "loadsh/debounce";
 import { search, MediaItem } from "@/app/api/fetchData";
+import Link from "next/link";
 
 const SearchBar = () => {
   const [searchValue, setSearchValue] = useState("");
@@ -86,7 +87,14 @@ const SearchBar = () => {
                   {seachResults.map((item) => {
                     return (
                       <TableRow key={item.id}>
-                        <TableCell>{item.name || item.title}</TableCell>
+                        <TableCell>
+                          <Link
+                            href={`/details/${item.media_type}/${item.id}`}
+                            onClick={onClose}
+                          >
+                            {item.name || item.title}
+                          </Link>
+                        </TableCell>
                         <TableCell>{item.media_type}</TableCell>
                       </TableRow>
                     );

@@ -10,16 +10,16 @@ import {
 } from "@nextui-org/react";
 import { signOutUser } from "@/lib/firebase";
 import { useSelector } from "react-redux";
-import { selectCurrentUser } from "@/store/root-reducer";
+import { selectCurrentUser, setCurrentUser } from "@/store/root-reducer";
+import { useDispatch } from "react-redux";
 
 const SignOutBtn = () => {
   const user = useSelector(selectCurrentUser);
+  const dispatch = useDispatch();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const signOut = async () => {
     try {
-      console.log(user);
-      await signOutUser();
-      console.log(user);
+      dispatch(setCurrentUser(null));
       onClose();
     } catch (error) {
       console.log(error);

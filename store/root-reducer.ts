@@ -2,7 +2,6 @@ import { combineReducers, createSlice } from "@reduxjs/toolkit";
 import type { CreateSliceOptions } from "@reduxjs/toolkit";
 import { PayloadAction } from "@reduxjs/toolkit";
 import { User } from "firebase/auth";
-import { stat } from "fs";
 
 import { createSelector } from "reselect";
 
@@ -48,7 +47,7 @@ export const selectShowModal = createSelector(
 // USer Reducer
 
 export interface userInterface {
-  currentUser: User | null;
+  currentUser: string | null;
 }
 
 const initialUser: userInterface = {
@@ -59,7 +58,8 @@ const userOptions: CreateSliceOptions = {
   name: "user",
   initialState: initialUser,
   reducers: {
-    setCurrentUser(state, action: PayloadAction<User | null>) {
+    setCurrentUser(state, action: PayloadAction<string | null>) {
+      console.log(action.payload);
       state.currentUser = action.payload;
     },
   },
@@ -75,14 +75,52 @@ export const selectCurrentUser = createSelector(
   [userState],
   (currentUser) => currentUser
 );
+
+//watchList reducer
+
+export interface watchListInterface {
+  uid: string;
+  movieWatchList: string[];
+  tvWatchList: string[];
+}
+
+const initialWatchList: watchListInterface = {
+  uid: "",
+  movieWatchList: [],
+  tvWatchList: [],
+};
+const watchListSlice = createSlice({
+  name: "watchlist",
+  initialState: initialWatchList,
+  reducers: {
+    setWatchlist(state, action: PayloadAction<watchListInterface>) {
+      state.uid = action.payload.uid;
+      state.movieWatchList = action.payload.movieWatchList;
+      state.tvWatchList = action.payload.tvWatchList;
+    },
+  },
+});
+
+const watchListState = (state: rootInterface) => {
+  return state.watchList;
+};
+export const watchListSelector = createSelector(
+  [watchListState],
+  (watchList) => watchList
+);
+
+export const { setWatchlist } = watchListSlice.actions;
+const watchListReducer = watchListSlice.reducer;
 //root reducer
 
 export interface rootInterface {
   modal: modalInterface;
   user: userInterface;
+  watchList: watchListInterface;
 }
 
 export const rootReducer = combineReducers({
   modal: modalReducer,
   user: userReducer,
+  watchList: watchListReducer,
 });

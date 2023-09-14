@@ -43,21 +43,37 @@ const HorizontalCustomRadio = (props: RadioProps) => {
 };
 
 const SearchPage = ({ params }: { params: { query: string } }) => {
-  const [selected, setSelected] = useState("multi");
+  const [selected, setSelected] = useState<"movie" | "tv" | "person" | "multi">(
+    "multi"
+  );
   const [searchResults, setSearchResults] = useState<MediaItem[]>([]);
   const query = new String(params.query).replace("%20", " ");
   useEffect(() => {
     const updateSearch = async () => {
-      setSearchResults(await search(selected, query));
+      const data: MediaItem[] = await search(selected, query);
+      if (selected === "multi") {
+        setSearchResults(data);
+      } else {
+        data.map((item) => {
+          item.media_type = selected;
+        });
+        setSearchResults(data);
+      }
     };
     updateSearch();
   }, [selected]);
+  const resetScroll = () => {
+    window.scrollTo(0, 0);
+  };
   return (
     <div className=" mx-auto w-10/12 search-container block md:grid py-16">
       <RadioGroup
         label="Select Category"
         value={selected}
-        onValueChange={setSelected}
+        onValueChange={(value) => {
+          resetScroll();
+          setSelected(value);
+        }}
         defaultValue="multi"
         className="fixed w-1/5 hidden md:block"
       >

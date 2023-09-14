@@ -56,6 +56,11 @@ export default function NavbarComponent() {
             Shows
           </Link>
         </NavbarItem>
+        <NavbarItem>
+          <Link color="foreground" href="/watchlist">
+            Watchlist
+          </Link>
+        </NavbarItem>
       </NavbarContent>
 
       <NavbarContent justify="end">

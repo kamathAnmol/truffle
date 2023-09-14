@@ -8,7 +8,6 @@ import { getDefaultMiddleware } from "@reduxjs/toolkit";
 const persistConfig = {
   key: "root",
   storage,
-  blacklist: ["user"],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

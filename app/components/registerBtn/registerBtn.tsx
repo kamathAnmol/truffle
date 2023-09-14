@@ -13,11 +13,13 @@ import {
 import { MailIcon } from "@/public/assests/MailIcon";
 import { LockIcon } from "@/public/assests/LockIcon";
 import { User2 } from "lucide-react";
-import { EmailRegister, createUserDoc } from "@/lib/firebase";
-import { AuthError, UserCredential, UserInfo } from "firebase/auth";
+import { useDispatch } from "react-redux";
+import { setCurrentUser } from "@/store/root-reducer";
+import { data } from "autoprefixer";
 
 const RegisterBtn = () => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+  const dispatch = useDispatch();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -28,18 +30,24 @@ const RegisterBtn = () => {
       setError("All Fields Are Required");
       return;
     }
+
     try {
-      const UserCredential: UserCredential | undefined = await EmailRegister(
-        name,
-        email,
-        password
-      );
-      const user: UserInfo | undefined = UserCredential?.user;
-      await createUserDoc(user, { name });
-      onClose();
-    } catch (error: any) {
-      console.log("error while registering", error);
-      setError(error.code);
+      const response = await fetch("/api/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name, password, email }),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        dispatch(setCurrentUser(data.uid));
+        console.log("registered successfully");
+      } else {
+        setError(data.message);
+      }
+    } catch (error) {
+      console.log("error while regsitering", error);
     }
   };
 

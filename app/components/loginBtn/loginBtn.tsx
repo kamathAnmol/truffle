@@ -12,25 +12,37 @@ import {
 } from "@nextui-org/react";
 import { MailIcon } from "@/public/assests/MailIcon";
 import { LockIcon } from "@/public/assests/LockIcon";
-import { emailLogin } from "@/lib/firebase";
+import { useDispatch } from "react-redux";
+import { setCurrentUser } from "@/store/root-reducer";
 
 const LoginBtn = () => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | undefined | any>();
+  const dispatch = useDispatch();
   const handleSubmit = async () => {
     if (!email || !password) {
       setError("All Fields Are Required");
       return;
     }
     try {
-      await emailLogin(email, password);
-      onClose();
-      alert("logged in successfully");
-    } catch (error: any) {
-      console.log("error while Loggin In", error);
-      setError(error.code);
+      const response = await fetch("/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+      const data = await response.json();
+
+      if (response.ok) {
+        dispatch(setCurrentUser(data.uid));
+      } else {
+        setError(data.message);
+      }
+    } catch (error) {
+      console.log("error while login", error);
     }
   };
 
@@ -73,7 +85,7 @@ const LoginBtn = () => {
                 <div className="flex py-2 px-1 justify-between">
                   {error && (
                     <Chip variant="dot" color="danger">
-                      {error.code}
+                      {error}
                     </Chip>
                   )}
                   {/* <Checkbox
