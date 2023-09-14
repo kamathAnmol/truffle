@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Search } from "lucide-react";
 import "./searchBar.styles.scss";
 import {
@@ -21,11 +21,11 @@ const SearchBar = () => {
   const [searchValue, setSearchValue] = useState("");
   const [seachResults, setSearchResults] = useState<MediaItem[]>([]);
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
-  const [debaounceValue] = useDebounce(searchValue, 500);
+  const [debounceValue] = useDebounce(searchValue, 500);
 
-  const updateSearch = async () => {
-    setSearchResults(await search("multi", debaounceValue));
-  };
+  const updateSearch = useCallback(async () => {
+    setSearchResults(await search("multi", debounceValue));
+  }, [debounceValue]);
   useEffect(() => {
     updateSearch();
   }, [searchValue, updateSearch]);

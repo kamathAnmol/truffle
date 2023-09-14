@@ -8,7 +8,6 @@ import {
   Button,
   useDisclosure,
 } from "@nextui-org/react";
-import { signOutUser } from "@/lib/firebase";
 import { useSelector } from "react-redux";
 import { selectCurrentUser, setCurrentUser } from "@/store/root-reducer";
 import { useDispatch } from "react-redux";
