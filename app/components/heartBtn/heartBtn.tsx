@@ -8,6 +8,7 @@ import {
   watchListInterface,
   watchListSelector,
 } from "@/store/root-reducer";
+import { Image } from "@nextui-org/react";
 
 interface props {
   active: boolean;
@@ -44,7 +45,7 @@ const HeartBtn = (props: props) => {
       }
     };
     getWatchList();
-  }, [user]);
+  }, [user, dispatch, watchList]);
   useEffect(() => {
     const updateWatchList = async () => {
       const response = await fetch("/api/updateWatchlist", {
@@ -97,9 +98,9 @@ const HeartBtn = (props: props) => {
   return (
     <>
       {props.active && (
-        <img {...heartActive} alt="" onClick={removeWatchlist} />
+        <Image {...heartActive} alt="" onClick={removeWatchlist} />
       )}
-      {!props.active && <img {...heartInactive} onClick={addWatchlist} />}
+      {!props.active && <Image {...heartInactive} onClick={addWatchlist} />}
     </>
   );
 };

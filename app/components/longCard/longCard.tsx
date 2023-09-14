@@ -9,7 +9,7 @@ import {
   genreInterface,
   img_base_uri,
 } from "@/app/api/fetchData";
-import { Progress, Chip } from "@nextui-org/react";
+import { Progress, Chip, Image } from "@nextui-org/react";
 import Link from "next/link";
 import { useSelector } from "react-redux";
 import {
@@ -48,7 +48,7 @@ const LongCard = (props: cardProps) => {
       }
     };
     getGenres();
-  }, []);
+  }, [item.genre_ids, item.media_type]);
   useEffect(() => {
     const checkWatchList = () => {
       if (item.media_type === "movie") {
@@ -62,7 +62,7 @@ const LongCard = (props: cardProps) => {
       }
     };
     checkWatchList();
-  }, [watchlist]);
+  }, [watchlist, item?.id, item.media_type]);
 
   const imgPath = (): string => {
     let img =
@@ -102,12 +102,12 @@ const LongCard = (props: cardProps) => {
         )}
       <Link href={`/details/${item.media_type}/${item.id}`}>
         <div className="bg-black/80 flex flex-col md:flex-row md:gap-5 p-8 rounded-md ">
-          <img
+          <Image
             src={img}
             alt="poster"
             className=" rounded-md md:self-center self-start"
             style={{ aspectRatio: "9/16", height: "25vw", maxHeight: "300px" }}
-          ></img>
+          ></Image>
           <div className="flex flex-col gap-2 md:gap-5">
             <h1 className="font-bold text-base md:text-lg">
               {item.name || item.title || item.name}&nbsp;
@@ -126,7 +126,7 @@ const LongCard = (props: cardProps) => {
             )}
             <div className="genre-container flex">
               {genres?.map((genre) => {
-                return <Chip>{genre.name}</Chip>;
+                return <Chip key={genre.id}>{genre.name}</Chip>;
               })}
             </div>
 

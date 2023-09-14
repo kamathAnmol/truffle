@@ -14,7 +14,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import HeartBtn from "../heartBtn/heartBtn";
 import Link from "next/link";
-import { Chip, Progress } from "@nextui-org/react";
+import { Chip, Image, Progress } from "@nextui-org/react";
 interface props {
   id: string;
   type: string;
@@ -50,7 +50,7 @@ const Watchlist = (props: props) => {
     getGenres();
 
     fetchdata();
-  }, []);
+  }, [details, id, type]);
 
   useEffect(() => {
     const checkWatchList = () => {
@@ -65,7 +65,7 @@ const Watchlist = (props: props) => {
       }
     };
     details && checkWatchList();
-  }, [details]);
+  }, [details, watchlist.movieWatchList, watchlist.tvWatchList]);
 
   const imgPath = (): string => {
     let img =
@@ -106,7 +106,7 @@ const Watchlist = (props: props) => {
       )}
       <Link href={`/details/${details?.media_type}/${details?.id}`}>
         <div className="bg-black/80 flex gap-5 p-8 rounded-md ">
-          <img
+          <Image
             src={img}
             alt="poster"
             className=" rounded-md self-center"
@@ -115,7 +115,7 @@ const Watchlist = (props: props) => {
               height: "25vw",
               maxHeight: "300px",
             }}
-          ></img>
+          ></Image>
           <div className="flex flex-col gap-5">
             <h1 className="font-bold text-base md:text-lg">
               {details?.name || details?.title || details?.name}&nbsp;
@@ -137,7 +137,7 @@ const Watchlist = (props: props) => {
               )}
             <div className="genre-container flex">
               {genres?.map((genre) => {
-                return <Chip>{genre.name}</Chip>;
+                return <Chip key={genre.id}>{genre.name}</Chip>;
               })}
             </div>
 

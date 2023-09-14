@@ -8,7 +8,7 @@ import {
   img_base_uri,
 } from "@/app/api/fetchData";
 import { watchListInterface, watchListSelector } from "@/store/root-reducer";
-import { Chip, Progress } from "@nextui-org/react";
+import { Chip, Image, Progress } from "@nextui-org/react";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import HeartBtn from "@/app/components/heartBtn/heartBtn";
@@ -31,7 +31,7 @@ const DetailPage = ({ params }: { params: { query: string[] } }) => {
       setCrew(getCredits.crew);
     };
     fetchData();
-  }, []);
+  }, [query]);
 
   useEffect(() => {
     const checkWatchList = () => {
@@ -46,7 +46,7 @@ const DetailPage = ({ params }: { params: { query: string[] } }) => {
       }
     };
     checkWatchList();
-  }, [watchlist]);
+  }, [watchlist, details?.id, query]);
 
   return (
     <div>
@@ -67,7 +67,7 @@ const DetailPage = ({ params }: { params: { query: string[] } }) => {
             <HeartBtn active={isLiked!} id={query[1]} type={query[0]} />
           </div>
           <div className="img-wrapper w-1/3 flex content-center md:m-auto">
-            <img
+            <Image
               src={`${img_base_uri}${
                 details?.poster_path || details?.profile_path
               }`}

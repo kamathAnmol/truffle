@@ -26,7 +26,7 @@ const SearchBar = () => {
   }, 300);
   useEffect(() => {
     updateSearch();
-  }, [searchValue]);
+  }, [searchValue, updateSearch]);
 
   return (
     <>

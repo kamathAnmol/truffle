@@ -15,7 +15,7 @@ interface props {
   list: detailsType[];
 }
 
-export default ({ list }: props) => {
+const SwiperComponent = ({ list }: props) => {
   return (
     <Swiper
       modules={[Navigation, Pagination, Scrollbar, Autoplay]}
@@ -28,7 +28,7 @@ export default ({ list }: props) => {
     >
       {list.map((item) => {
         return (
-          <SwiperSlide>
+          <SwiperSlide key={item.id}>
             <Link href={`/details/${item.media_type}/${item.id}`}>
               <div>
                 <Image
@@ -42,6 +42,7 @@ export default ({ list }: props) => {
                   <Image
                     src={`${img_base_uri}${item.poster_path}`}
                     className="w-full"
+                    alt="poster"
                   />
                 </div>
                 <div className="w-4/6 gap-5 self-end ml-4">
@@ -67,3 +68,4 @@ export default ({ list }: props) => {
     </Swiper>
   );
 };
+export default SwiperComponent;

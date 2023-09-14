@@ -18,7 +18,7 @@ import {
   ModalBody,
   useDisclosure,
 } from "@nextui-org/react";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 const VerticalCustomRadio = (props: RadioProps) => {
   const { children, ...otherProps } = props;
@@ -45,10 +45,11 @@ const MovieGenre = () => {
   const [movies, setMovies] = useState<detailsType[]>();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-  const getMovies = async () => {
+  const getMovies = useCallback(async () => {
     const data = await fetchByGenre("movie", selected);
     setMovies(data);
-  };
+  }, [selected]);
+
   useEffect(() => {
     const fetchGens = async () => {
       const data = await fetchGenres();
