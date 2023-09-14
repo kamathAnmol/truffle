@@ -12,7 +12,7 @@ const Display2 = ({ list, type }: Props) => {
     <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6 ">
       {list?.map((item) => {
         item.media_type = type;
-        return <Card1 item={item}></Card1>;
+        return <Card1 item={item} key={item.id}></Card1>;
       })}
     </div>
   );

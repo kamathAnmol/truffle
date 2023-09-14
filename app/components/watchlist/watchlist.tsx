@@ -5,7 +5,11 @@ import {
   genreInterface,
   img_base_uri,
 } from "@/app/api/fetchData";
-import { watchListInterface, watchListSelector } from "@/store/root-reducer";
+import {
+  selectCurrentUser,
+  watchListInterface,
+  watchListSelector,
+} from "@/store/root-reducer";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import HeartBtn from "../heartBtn/heartBtn";
@@ -22,6 +26,7 @@ const Watchlist = (props: props) => {
   const [genres, setGenres] = useState<genreInterface[]>();
   const [isLiked, setIsLiked] = useState<boolean>();
   const watchlist: watchListInterface = useSelector(watchListSelector);
+  const uid = useSelector(selectCurrentUser);
   useEffect(() => {
     const fetchdata = async () => {
       const data = await fetchDetails(type, id);

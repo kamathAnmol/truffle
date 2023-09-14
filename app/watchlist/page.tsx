@@ -28,37 +28,46 @@ const WatchlistPage = () => {
     fetchWatchlist();
   }, []);
 
-  return (
-    <div className="w-3/4 mx-auto">
-      {watchlist === null ? (
-        <h1>Nothing here</h1>
-      ) : (
-        <div>
-          {watchlist?.movieWatchList.length! > 0 && (
-            <div>
-              <h1 className=" font-bold text-xl my-4">Movies</h1>
-              <Divider></Divider>
-              <div className="flex flex-col gap-4 my-8">
-                {watchlist?.movieWatchList?.map((id) => {
-                  return <Watchlist type={"movie"} id={id}></Watchlist>;
-                })}
+  if (uid === null) {
+    return (
+      <h1 className=" text-3xl font-bold mt-64 text-center">Please Login</h1>
+    );
+  } else
+    return (
+      <div className="w-3/4 mx-auto">
+        {watchlist?.movieWatchList.length == 0 &&
+        watchlist.tvWatchList.length == 0 ? (
+          <h1 className=" text-3xl font-bold mt-64 text-center">
+            Nothing here
+          </h1>
+        ) : (
+          <div>
+            {watchlist?.movieWatchList.length! > 0 && (
+              <div>
+                <h1 className=" font-bold text-xl my-4">Movies</h1>
+                <Divider></Divider>
+                <div className="flex flex-col gap-4 my-8">
+                  {watchlist?.movieWatchList?.map((id) => {
+                    return <Watchlist type={"movie"} id={id}></Watchlist>;
+                  })}
+                </div>
               </div>
-            </div>
-          )}
-          {watchlist?.tvWatchList.length! > 0 && (
-            <div>
-              <h1 className=" font-bold text-xl my-4">Tv Shows</h1>
-              <div className="flex flex-col gap-4 my-8">
-                {watchlist?.tvWatchList?.map((id) => {
-                  return <Watchlist type="tv" id={id}></Watchlist>;
-                })}
+            )}
+            {watchlist?.tvWatchList.length! > 0 && (
+              <div>
+                <h1 className=" font-bold text-xl my-4">Tv Shows</h1>
+                <Divider></Divider>
+                <div className="flex flex-col gap-4 my-8">
+                  {watchlist?.tvWatchList?.map((id) => {
+                    return <Watchlist type="tv" id={id}></Watchlist>;
+                  })}
+                </div>
               </div>
-            </div>
-          )}
-        </div>
-      )}
-    </div>
-  );
+            )}
+          </div>
+        )}
+      </div>
+    );
 };
 
 export default WatchlistPage;

@@ -12,7 +12,11 @@ import {
 import { Progress, Chip } from "@nextui-org/react";
 import Link from "next/link";
 import { useSelector } from "react-redux";
-import { watchListInterface, watchListSelector } from "@/store/root-reducer";
+import {
+  watchListInterface,
+  watchListSelector,
+  selectCurrentUser,
+} from "@/store/root-reducer";
 import HeartBtn from "../heartBtn/heartBtn";
 interface cardProps {
   item: MediaItem | detailsType;
@@ -23,6 +27,7 @@ const LongCard = (props: cardProps) => {
   const { item, key } = props;
   const [genres, setGenres] = useState<genreInterface[]>();
   const [isLiked, setIsLiked] = useState<boolean>();
+  const uid = useSelector(selectCurrentUser);
 
   const watchlist: watchListInterface = useSelector(watchListSelector);
 
@@ -85,15 +90,16 @@ const LongCard = (props: cardProps) => {
       }}
       key={key}
     >
-      {(item.media_type === "movie" || item.media_type === "tv") && (
-        <div className="absolute top-3 right-3 w-14  ">
-          <HeartBtn
-            active={isLiked!}
-            type={item.media_type}
-            id={item.id.toString()}
-          ></HeartBtn>
-        </div>
-      )}
+      {(item.media_type === "movie" || item.media_type === "tv") &&
+        uid !== null && (
+          <div className="absolute top-3 right-3 w-14  ">
+            <HeartBtn
+              active={isLiked!}
+              type={item.media_type}
+              id={item.id.toString()}
+            ></HeartBtn>
+          </div>
+        )}
       <Link href={`/details/${item.media_type}/${item.id}`}>
         <div className="bg-black/80 flex flex-col md:flex-row md:gap-5 p-8 rounded-md ">
           <img
