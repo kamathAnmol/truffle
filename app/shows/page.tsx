@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { detailsType, fetchLatest } from "../api/fetchData";
-import Carousel from "../components/carousel/carousel";
+import Swiper from "../components/swiper/swiper";
 
 const ShowsComponent = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -17,7 +17,7 @@ const ShowsComponent = () => {
   }, []);
   return (
     <div>
-      <Carousel data={trendingShows}></Carousel>
+      <Swiper list={trendingShows}></Swiper>
     </div>
   );
 };

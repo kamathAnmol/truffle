@@ -1,25 +1,19 @@
 "use client";
 
-import {
-  MediaItem,
-  detailsType,
-  fetchLatest,
-  getAllTrending,
-} from "@/app/api/fetchData";
-import Carousel from "@/app/components/carousel/carousel";
+import { detailsType, fetchLatest, getAllTrending } from "@/app/api/fetchData";
 import React, { useEffect, useState } from "react";
 import { Button, CircularProgress } from "@nextui-org/react";
 import Display1 from "./components/display/display1";
 import { genreInterface } from "@/app/api/fetchData";
-import Display2 from "./components/display/display2";
 import Link from "next/link";
+import Swiper from "./components/swiper/swiper";
 interface gens {
   movie: genreInterface[];
   tv: genreInterface[];
 }
 
 export default function Home() {
-  const [allTrending, setAllTrending] = useState<MediaItem[]>([]);
+  const [allTrending, setAllTrending] = useState<detailsType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [trendingMovies, setTreandingMovies] = useState<detailsType[]>([]);
   const [trendingShows, setTreandingShows] = useState<detailsType[]>([]);
@@ -48,7 +42,7 @@ export default function Home() {
   } else {
     return (
       <div className="home-container">
-        <Carousel data={allTrending}></Carousel>
+        <Swiper list={allTrending}></Swiper>
 
         <div className="w-4/5 mx-auto my-16 bg-slate-950 py-8 rounded-xl">
           <h1 className="font-bold text-xl ml-8 ">

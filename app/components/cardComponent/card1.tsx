@@ -28,9 +28,6 @@ const Card1 = (props: props) => {
             src={imgPath}
             shadow="sm"
             className="object-cover w-full max-h-96"
-            style={{
-              aspectRatio: "9/16",
-            }}
           ></Image>
         </CardHeader>
         <CardBody className=" overflow-y-hidden">
