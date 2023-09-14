@@ -1,65 +1,42 @@
 import { Person } from "@/app/api/fetchData";
-import React, { RefObject, useRef } from "react";
-import Card1 from "../cardComponent/card1";
-import { Button, ScrollShadow } from "@nextui-org/react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import React from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import {
+  Navigation,
+  Pagination,
+  Scrollbar,
+  Autoplay,
+  Virtual,
+} from "swiper/modules";
 import Card3 from "../cardComponent/card3";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import "swiper/css/scrollbar";
 interface props {
   list: Person[] | undefined;
 }
 const Display3 = (props: props) => {
   const { list } = props;
-  const scrollRef = useRef(null);
-  const scroll = (
-    direction: "right" | "left",
-    ref?: RefObject<HTMLDivElement>
-  ) => {
-    if (ref?.current) {
-      if (direction === "left") {
-        ref.current.scrollBy({
-          left: -500,
-          behavior: "smooth",
-        });
-      } else {
-        ref.current.scrollBy({
-          left: 500,
-          behavior: "smooth",
-        });
-      }
-    }
-  };
+
   return (
-    <div style={{ width: "96%" }} className="mx-auto   ">
-      <ScrollShadow
-        className=" overflow-x-scroll  flex  gap-4 p-6 no-scroll-bar snap-x h-max"
-        ref={scrollRef}
+    <div className="p-8">
+      <Swiper
+        modules={[Navigation, Pagination, Scrollbar, Autoplay, Virtual]}
+        spaceBetween={10}
+        slidesPerView={5}
+        navigation
+        pagination={{ clickable: true }}
+        virtual
       >
-        {list?.map((item) => {
-          return <Card3 item={item} key={item.id}></Card3>;
+        {list?.map((item, index) => {
+          return (
+            <SwiperSlide key={index} virtualIndex={index} className="h-max">
+              <Card3 item={item} key={item.id}></Card3>
+            </SwiperSlide>
+          );
         })}
-      </ScrollShadow>
-      <div className="w-full  justify-between hidden md:flex">
-        <Button
-          variant="light"
-          color="primary"
-          className=" rounded-full"
-          onClick={() => {
-            scroll("left", scrollRef);
-          }}
-        >
-          <ChevronLeft />
-        </Button>
-        <Button
-          variant="light"
-          color="primary"
-          className=" rounded-full"
-          onClick={() => {
-            scroll("right", scrollRef);
-          }}
-        >
-          <ChevronRight />
-        </Button>
-      </div>
+      </Swiper>
     </div>
   );
 };

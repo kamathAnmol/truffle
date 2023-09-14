@@ -8,6 +8,10 @@ import {
   Virtual,
 } from "swiper/modules";
 import Card1 from "../cardComponent/card1";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import "swiper/css/scrollbar";
 
 interface props {
   list: detailsType[];

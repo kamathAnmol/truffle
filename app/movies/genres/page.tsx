@@ -56,10 +56,10 @@ const MovieGenre = () => {
       getMovies();
     };
     fetchGens();
-  }, []);
+  }, [getMovies]);
   useEffect(() => {
     getMovies();
-  }, [selected]);
+  }, [selected, getMovies]);
   return (
     <div
       style={{ gridTemplateColumns: "3fr 9fr" }}
@@ -73,7 +73,7 @@ const MovieGenre = () => {
         className=" w-full hidden md:block  bg-black/80  backdrop-blur-lg  py-6 overflow-y-scroll no-scroll-bar"
       >
         {genres?.map((genre) => (
-          <VerticalCustomRadio value={genre.id.toString()}>
+          <VerticalCustomRadio value={genre.id.toString()} key={genre.id}>
             {genre.name}
           </VerticalCustomRadio>
         ))}
@@ -105,7 +105,9 @@ const MovieGenre = () => {
                     onChange={onClose}
                   >
                     {genres?.map((genre) => (
-                      <Radio value={genre.id.toString()}>{genre.name}</Radio>
+                      <Radio value={genre.id.toString()} key={genre.id}>
+                        {genre.name}
+                      </Radio>
                     ))}
                   </RadioGroup>
                 </ModalBody>

@@ -11,8 +11,6 @@ import { watchListInterface, watchListSelector } from "@/store/root-reducer";
 import { Chip, Progress } from "@nextui-org/react";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import heartActive from "@/public/assests/heart/heart-active.svg";
-import heartInactive from "@/public/assests/heart/heart-inactive.svg";
 import HeartBtn from "@/app/components/heartBtn/heartBtn";
 import Display3 from "@/app/components/display/display3";
 
@@ -120,7 +118,7 @@ const DetailPage = ({ params }: { params: { query: string[] } }) => {
             )}
             <div className="flex">
               {details?.genres?.map((genre) => {
-                return <Chip>{genre.name}</Chip>;
+                return <Chip key={genre.id}>{genre.name}</Chip>;
               })}
             </div>
             {details?.tagline && (
@@ -130,8 +128,13 @@ const DetailPage = ({ params }: { params: { query: string[] } }) => {
           </div>
         </div>
       </div>
-      <div>
-        <Display3 list={cast}></Display3>
+      <div className=" bg-stone-900 rounded-md p-8 w-4/5 mx-auto my-8">
+        <h1 className="font-bold text-2xl">Cast</h1>
+        <Display3 list={cast} key={query[1]}></Display3>
+      </div>
+      <div className=" bg-stone-900 rounded-md p-8 w-4/5 mx-auto my-8">
+        <h1 className="font-bold text-2xl">Crew</h1>
+        <Display3 list={crew} key={query[1]}></Display3>
       </div>
     </div>
   );

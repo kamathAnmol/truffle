@@ -61,7 +61,7 @@ const SearchPage = ({ params }: { params: { query: string } }) => {
       }
     };
     updateSearch();
-  }, [selected]);
+  }, [selected, query]);
   const resetScroll = () => {
     window.scrollTo(0, 0);
   };

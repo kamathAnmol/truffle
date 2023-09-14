@@ -26,7 +26,7 @@ const WatchlistPage = () => {
       } else setWatchlist(data.watchList);
     };
     fetchWatchlist();
-  }, []);
+  }, [uid]);
 
   if (uid === null) {
     return (
@@ -48,7 +48,9 @@ const WatchlistPage = () => {
                 <Divider></Divider>
                 <div className="flex flex-col gap-4 my-8">
                   {watchlist?.movieWatchList?.map((id) => {
-                    return <Watchlist type={"movie"} id={id}></Watchlist>;
+                    return (
+                      <Watchlist type={"movie"} id={id} key={id}></Watchlist>
+                    );
                   })}
                 </div>
               </div>
@@ -59,7 +61,7 @@ const WatchlistPage = () => {
                 <Divider></Divider>
                 <div className="flex flex-col gap-4 my-8">
                   {watchlist?.tvWatchList?.map((id) => {
-                    return <Watchlist type="tv" id={id}></Watchlist>;
+                    return <Watchlist type="tv" id={id} key={id}></Watchlist>;
                   })}
                 </div>
               </div>
