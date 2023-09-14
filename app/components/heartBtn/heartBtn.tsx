@@ -100,7 +100,9 @@ const HeartBtn = (props: props) => {
       {props.active && (
         <Image {...heartActive} alt="" onClick={removeWatchlist} />
       )}
-      {!props.active && <Image {...heartInactive} onClick={addWatchlist} />}
+      {!props.active && (
+        <Image {...heartInactive} onClick={addWatchlist} alt="" />
+      )}
     </>
   );
 };
