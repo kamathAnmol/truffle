@@ -94,9 +94,9 @@ const watchListSlice = createSlice({
   initialState: initialWatchList,
   reducers: {
     setWatchlist(state, action: PayloadAction<watchListInterface>) {
-      state.uid = action.payload.uid;
-      state.movieWatchList = action.payload.movieWatchList;
-      state.tvWatchList = action.payload.tvWatchList;
+      state.uid = action.payload?.uid;
+      state.movieWatchList = action.payload?.movieWatchList;
+      state.tvWatchList = action.payload?.tvWatchList;
     },
   },
 });

@@ -7,7 +7,11 @@ import {
   fetchDetails,
   img_base_uri,
 } from "@/app/api/fetchData";
-import { watchListInterface, watchListSelector } from "@/store/root-reducer";
+import {
+  selectCurrentUser,
+  watchListInterface,
+  watchListSelector,
+} from "@/store/root-reducer";
 import { Chip, Image, Progress } from "@nextui-org/react";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -21,6 +25,7 @@ const DetailPage = ({ params }: { params: { query: string[] } }) => {
   const [cast, setCast] = useState<Person[]>();
   const [isLiked, setIsLiked] = useState<boolean>();
   const watchlist: watchListInterface = useSelector(watchListSelector);
+  const uid = useSelector(selectCurrentUser);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -35,12 +40,12 @@ const DetailPage = ({ params }: { params: { query: string[] } }) => {
 
   useEffect(() => {
     const checkWatchList = () => {
-      if (query[0] === "movie") {
-        if (watchlist.movieWatchList.includes(details?.id.toString()!))
+      if (query[0] === "movie" && uid !== null) {
+        if (watchlist.movieWatchList?.includes(details?.id.toString()!))
           setIsLiked(true);
         else setIsLiked(false);
-      } else if (query[0] == "tv") {
-        if (watchlist.tvWatchList.includes(details?.id.toString()!))
+      } else if (query[0] == "tv" && uid !== null) {
+        if (watchlist.tvWatchList?.includes(details?.id.toString()!))
           setIsLiked(true);
         else setIsLiked(false);
       }
@@ -63,9 +68,12 @@ const DetailPage = ({ params }: { params: { query: string[] } }) => {
           className="backdrop-wrapper flex flex-col md:flex-row content-start md:content-center w-full  bg-black/70 backdrop-blur-sm p-20"
           style={{ minHeight: "30vw" }}
         >
-          <div className="absolute top-3 right-3 w-14">
-            <HeartBtn active={isLiked!} id={query[1]} type={query[0]} />
-          </div>
+          {uid !== null && (
+            <div className="absolute top-3 right-3 w-14">
+              <HeartBtn active={isLiked!} id={query[1]} type={query[0]} />
+            </div>
+          )}
+
           <div className="img-wrapper w-1/3 flex content-center md:m-auto">
             <Image
               src={`${img_base_uri}${

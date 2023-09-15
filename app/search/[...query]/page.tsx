@@ -43,6 +43,7 @@ const HorizontalCustomRadio = (props: RadioProps) => {
 };
 
 const SearchPage = ({ params }: { params: { query: string } }) => {
+  type valueType = "movie" | "tv" | "person" | "multi";
   const [selected, setSelected] = useState<"movie" | "tv" | "person" | "multi">(
     "multi"
   );
@@ -72,7 +73,7 @@ const SearchPage = ({ params }: { params: { query: string } }) => {
         value={selected}
         onValueChange={(value) => {
           resetScroll();
-          setSelected(value);
+          setSelected(value as valueType);
         }}
         defaultValue="multi"
         className="fixed w-1/5 hidden md:block"
@@ -85,7 +86,9 @@ const SearchPage = ({ params }: { params: { query: string } }) => {
       <RadioGroup
         label="Select Category"
         value={selected}
-        onValueChange={setSelected}
+        onValueChange={(value) => {
+          setSelected(value as valueType);
+        }}
         defaultValue="multi"
         orientation="horizontal"
         className=" w-full block md:hidden fixed bg-black/80  backdrop-blur-lg  top-16 py-6"

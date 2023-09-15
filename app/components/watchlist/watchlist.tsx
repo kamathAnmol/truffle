@@ -109,12 +109,7 @@ const Watchlist = (props: props) => {
           <Image
             src={img}
             alt="poster"
-            className=" rounded-md self-center"
-            style={{
-              aspectRatio: "9/16",
-              height: "25vw",
-              maxHeight: "300px",
-            }}
+            className=" rounded-md self-center max-h-96"
           ></Image>
           <div className="flex flex-col gap-5">
             <h1 className="font-bold text-base md:text-lg">

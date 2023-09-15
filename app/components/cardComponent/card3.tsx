@@ -9,19 +9,21 @@ type Props = {
 const Card3 = ({ item }: Props) => {
   return (
     <div>
-      <Card isFooterBlurred radius="lg" className="border-none">
+      <Card isFooterBlurred radius="lg" className="border-none w-max">
         <Image
           alt="profile"
-          className="object-cover"
-          height={250}
+          className="object-cover h-52"
           src={`${img_base_uri}${item.profile_path}`}
-          width={200}
         />
-        <CardFooter className="flex flex-col py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10 ">
+        <CardFooter className="flex flex-col py-1 absolute before:rounded-xl rounded-large bottom-1  shadow-small z-10 ">
           <p className="text-lg text-white/80 text-left">
             {item.original_name}
           </p>
-          <p className="text-tiny text-white/80">as {item.character}</p>
+          {item.character ? (
+            <p className="text-tiny text-white/80">as {item.character}</p>
+          ) : (
+            <p className="text-tiny text-white/80"> {item.job}</p>
+          )}
         </CardFooter>
       </Card>
     </div>
