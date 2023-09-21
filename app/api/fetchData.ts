@@ -105,7 +105,7 @@ export interface detailsType {
   number_of_seasons?: number;
   origin_country?: string[];
   original_name?: string;
-  seasons?: any[];
+  seasons?: Season[];
   type?: string;
 
   also_known_as?: string[];
@@ -139,6 +139,45 @@ export interface creditsInterface {
   cast: Person[];
   crew: Person[];
   id: number;
+}
+export interface Season {
+  air_date: string;
+  episode_count: number;
+  id: number;
+  name: string;
+  overview: string;
+  poster_path: string;
+  season_number: number;
+  vote_average: number;
+}
+export interface Episode {
+  air_date: string;
+  episode_number: number;
+  episode_type: string;
+  id: number;
+  name: string;
+  overview: string;
+  production_code: string;
+  runtime: number;
+  season_number: number;
+  show_id: number;
+  still_path: string;
+  vote_average: number;
+  vote_count: number;
+  crew: Person[];
+  guest_stars: Person[];
+}
+
+export interface seasonDetails {
+  _id: string;
+  air_date: string;
+  episodes: Episode[];
+  name: string;
+  overview: string;
+  id: number;
+  poster_path: string;
+  season_number: number;
+  vote_average: number;
 }
 
 export const getAllTrending = async () => {
@@ -204,5 +243,13 @@ export const fetchCredits = async (type: string, id: string) => {
     `${baseUri}${type}/${id}/credits?api_key=${apiKey}`
   );
   const data: creditsInterface = await response.json();
+  return data;
+};
+
+export const fetchSeasonDetails = async (id: number, seasonNumber: number) => {
+  const response = await fetch(
+    `${baseUri}tv/${id}/season/${seasonNumber}?api_key=${apiKey}`
+  );
+  const data: seasonDetails = await response.json();
   return data;
 };

@@ -101,46 +101,55 @@ const SearchPage = ({ params }: { params: { query: string } }) => {
       <div className="h-16"></div>
       {selected === "multi" && (
         <div>
-          {searchResults.filter((item) => item.media_type === "movie").length >
-            0 && (
-            <>
-              <h1 className=" capitalize font-bold text-4xl my-7">Movies</h1>
-              <div className="flex flex-col gap-3">
-                {searchResults
-                  .filter((item) => item.media_type === "movie")
-                  .map((item) => {
-                    return <LongCard item={item} key={item.id}></LongCard>;
-                  })}
-              </div>
-            </>
-          )}
-          {searchResults.filter((item) => item.media_type === "tv").length >
-            0 && (
-            <>
-              <h1 className=" capitalize font-bold text-4xl my-7">Tv Shows</h1>
-              <div className="flex flex-col gap-3">
-                {searchResults
-                  .filter((item) => item.media_type === "tv")
-                  .map((item) => {
-                    return <LongCard item={item} key={item.id}></LongCard>;
-                  })}
-              </div>
-            </>
-          )}
-          {searchResults.filter((item) => item.media_type === "person").length >
-            0 && (
-            <>
-              <h1 className=" capitalize font-bold text-4xl my-7">People</h1>
-              <div className="flex flex-col gap-3">
-                {searchResults
-                  .filter((item) => item.media_type === "person")
-                  .map((item) => {
-                    return <LongCard item={item} key={item.id}></LongCard>;
-                  })}
-              </div>
-            </>
-          )}
+          <h1 className=" capitalize font-bold text-4xl my-7">All</h1>
+          <div className="flex flex-col gap-3">
+            {searchResults.map((item) => {
+              return <LongCard item={item} key={item.id}></LongCard>;
+            })}
+          </div>
         </div>
+
+        // <div>
+        //   {searchResults.filter((item) => item.media_type === "movie").length >
+        //     0 && (
+        //     <>
+        //       <h1 className=" capitalize font-bold text-4xl my-7">Movies</h1>
+        //       <div className="flex flex-col gap-3">
+        //         {searchResults
+        //           .filter((item) => item.media_type === "movie")
+        //           .map((item) => {
+        //             return <LongCard item={item} key={item.id}></LongCard>;
+        //           })}
+        //       </div>
+        //     </>
+        //   )}
+        //   {searchResults.filter((item) => item.media_type === "tv").length >
+        //     0 && (
+        //     <>
+        //       <h1 className=" capitalize font-bold text-4xl my-7">Tv Shows</h1>
+        //       <div className="flex flex-col gap-3">
+        //         {searchResults
+        //           .filter((item) => item.media_type === "tv")
+        //           .map((item) => {
+        //             return <LongCard item={item} key={item.id}></LongCard>;
+        //           })}
+        //       </div>
+        //     </>
+        //   )}
+        //   {searchResults.filter((item) => item.media_type === "person").length >
+        //     0 && (
+        //     <>
+        //       <h1 className=" capitalize font-bold text-4xl my-7">People</h1>
+        //       <div className="flex flex-col gap-3">
+        //         {searchResults
+        //           .filter((item) => item.media_type === "person")
+        //           .map((item) => {
+        //             return <LongCard item={item} key={item.id}></LongCard>;
+        //           })}
+        //       </div>
+        //     </>
+        //   )}
+        // </div>
       )}
       {selected === "movie" && (
         <div>

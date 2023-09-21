@@ -49,20 +49,6 @@ const LongCard = (props: cardProps) => {
     };
     getGenres();
   }, [item.genre_ids, item.media_type]);
-  useEffect(() => {
-    const checkWatchList = () => {
-      if (item.media_type === "movie") {
-        if (watchlist.movieWatchList.includes(item?.id.toString()!))
-          setIsLiked(true);
-        else setIsLiked(false);
-      } else if (item.media_type == "tv") {
-        if (watchlist.tvWatchList.includes(item?.id.toString()!))
-          setIsLiked(true);
-        else setIsLiked(false);
-      }
-    };
-    checkWatchList();
-  }, [watchlist, item?.id, item.media_type]);
 
   const imgPath = (): string => {
     let img =
@@ -86,27 +72,27 @@ const LongCard = (props: cardProps) => {
         background: item.backdrop_path
           ? `url("${img_base_uri}${item.backdrop_path && item.backdrop_path}")`
           : "#494949",
-        maxHeight: "400px",
+        maxHeight: "450px",
       }}
       key={key}
     >
-      {(item.media_type === "movie" || item.media_type === "tv") &&
+      {/* {(item.media_type === "movie" || item.media_type === "tv") &&
         uid !== null && (
           <div className="absolute top-3 right-3 w-14  ">
-            <HeartBtn
-              active={isLiked!}
-              type={item.media_type}
-              id={item.id.toString()}
-            ></HeartBtn>
+            <HeartBtn type={item.media_type} id={item.id.toString()}></HeartBtn>
           </div>
-        )}
+        )} */}
       <Link href={`/details/${item.media_type}/${item.id}`}>
-        <div className="bg-black/80 flex flex-col md:flex-row md:gap-5 p-8 rounded-md ">
+        <div
+          className="bg-black/80 md:grid  md:flex-row p-8 rounded-md "
+          style={{
+            gridTemplateColumns: "3fr 7fr",
+          }}
+        >
           <Image
             src={img}
             alt="poster"
-            className=" rounded-md md:self-center self-start"
-            style={{ aspectRatio: "9/16", height: "25vw", maxHeight: "300px" }}
+            className=" rounded-md md:self-center self-start h-full w-full max-h-60  md:max-h-80 xl:max-h-96"
           ></Image>
           <div className="flex flex-col gap-2 md:gap-5">
             <h1 className="font-bold text-base md:text-lg">

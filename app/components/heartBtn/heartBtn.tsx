@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import heartActive from "@/public/assests/heart/heart-active.svg";
 import heartInactive from "@/public/assests/heart/heart-inactive.svg";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,12 +11,12 @@ import {
 import { Image } from "@nextui-org/react";
 
 interface props {
-  active: boolean;
   type: string;
   id: string;
 }
 
-const HeartBtn = (props: props) => {
+const HeartBtn = ({ type, id }: props) => {
+  const [active, setActive] = useState<boolean>();
   const watchList = useSelector(watchListSelector);
   const dispatch = useDispatch();
   const user = useSelector(selectCurrentUser);
@@ -31,21 +31,33 @@ const HeartBtn = (props: props) => {
         body: JSON.stringify({ uid: user }),
       });
       const data = await response.json();
-      const dataWatchList: watchListInterface = data.watchList;
+      const dataWatchList = data.watchList;
+
       if (dataWatchList === null) {
-        const newWatchlist: watchListInterface = {
+        const newWatchlist = {
           uid: user!,
           movieWatchList: [],
           tvWatchList: [],
         };
         dispatch(setWatchlist(newWatchlist));
-        console.log(watchList);
       } else {
         dispatch(setWatchlist(dataWatchList));
       }
     };
-    getWatchList();
+
+    if (user && !watchList.uid) {
+      getWatchList();
+    }
+
+    if (type === "movie" && watchList.movieWatchList.includes(id)) {
+      setActive(true);
+    } else if (type === "tv" && watchList.tvWatchList.includes(id)) {
+      setActive(true);
+    } else {
+      setActive(false);
+    }
   }, [user, dispatch, watchList]);
+
   useEffect(() => {
     const updateWatchList = async () => {
       const response = await fetch("/api/updateWatchlist", {
@@ -60,16 +72,16 @@ const HeartBtn = (props: props) => {
   }, [watchList]);
 
   const addWatchlist = () => {
-    let updatedWatchList = { ...watchList }; // Create a shallow copy
-    if (props.type === "movie") {
+    let updatedWatchList = { ...watchList };
+    if (type === "movie") {
       updatedWatchList = {
         ...updatedWatchList,
-        movieWatchList: [...updatedWatchList.movieWatchList, props.id],
+        movieWatchList: [...updatedWatchList.movieWatchList, id],
       };
-    } else if (props.type === "tv") {
+    } else if (type === "tv") {
       updatedWatchList = {
         ...updatedWatchList,
-        tvWatchList: [...updatedWatchList.tvWatchList, props.id],
+        tvWatchList: [...updatedWatchList.tvWatchList, id],
       };
     }
     dispatch(setWatchlist(updatedWatchList));
@@ -77,19 +89,17 @@ const HeartBtn = (props: props) => {
 
   const removeWatchlist = () => {
     let updatedWatchList = { ...watchList }; // Create a shallow copy
-    if (props.type === "movie") {
+    if (type === "movie") {
       updatedWatchList = {
         ...updatedWatchList,
         movieWatchList: updatedWatchList.movieWatchList.filter(
-          (id) => id !== props.id
+          (id) => id !== id
         ),
       };
-    } else if (props.type === "tv") {
+    } else if (type === "tv") {
       updatedWatchList = {
         ...updatedWatchList,
-        tvWatchList: updatedWatchList.tvWatchList.filter(
-          (id) => id !== props.id
-        ),
+        tvWatchList: updatedWatchList.tvWatchList.filter((id) => id !== id),
       };
     }
     dispatch(setWatchlist(updatedWatchList));
@@ -97,12 +107,8 @@ const HeartBtn = (props: props) => {
 
   return (
     <>
-      {props.active && (
-        <Image {...heartActive} alt="" onClick={removeWatchlist} />
-      )}
-      {!props.active && (
-        <Image {...heartInactive} onClick={addWatchlist} alt="" />
-      )}
+      {active && <Image {...heartActive} alt="" onClick={removeWatchlist} />}
+      {!active && <Image {...heartInactive} onClick={addWatchlist} alt="" />}
     </>
   );
 };
