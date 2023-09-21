@@ -7,6 +7,7 @@ import {
   Scrollbar,
   Autoplay,
   Virtual,
+  Lazy,
 } from "swiper/modules";
 import Card3 from "../cardComponent/card3";
 import "swiper/css";
@@ -28,6 +29,8 @@ const Display3 = (props: props) => {
         navigation
         pagination={{ clickable: true }}
         virtual
+        preloadImages={false}
+        lazy={true}
       >
         {list?.map((item, index) => {
           return (

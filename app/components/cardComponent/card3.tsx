@@ -9,14 +9,18 @@ type Props = {
 const Card3 = ({ item }: Props) => {
   return (
     <div>
-      <Card isFooterBlurred radius="lg" className="border-none w-max">
+      <Card isFooterBlurred radius="lg" className="border-none flex">
         <Image
           alt="profile"
-          className="object-cover h-52"
-          src={`${img_base_uri}${item.profile_path}`}
+          className="object-cover  self-center min-h-max"
+          src={
+            item.profile_path !== null
+              ? `${img_base_uri}${item.profile_path}`
+              : `https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg`
+          }
         />
-        <CardFooter className="flex flex-col py-1 absolute before:rounded-xl rounded-large bottom-1  shadow-small z-10 ">
-          <p className="text-lg text-white/80 text-left">
+        <CardFooter className="flex flex-col py-1  before:rounded-xl rounded-large  shadow-small z-10 ">
+          <p className="text-lg text-white/80 text-center">
             {item.original_name}
           </p>
           {item.character ? (

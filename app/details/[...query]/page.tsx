@@ -51,7 +51,7 @@ const DetailPage = ({ params }: { params: { query: string[] } }) => {
       }
     };
     checkWatchList();
-  }, [watchlist, details?.id, query]);
+  }, [watchlist, details?.id, query, uid]);
 
   return (
     <div>

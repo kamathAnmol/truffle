@@ -2,7 +2,7 @@
 
 import { detailsType, fetchLatest, getAllTrending } from "@/app/api/fetchData";
 import React, { useEffect, useState } from "react";
-import { Button, CircularProgress } from "@nextui-org/react";
+import { Button, Spinner } from "@nextui-org/react";
 import Display1 from "./components/display/display1";
 import { genreInterface } from "@/app/api/fetchData";
 import Link from "next/link";
@@ -17,7 +17,6 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [trendingMovies, setTreandingMovies] = useState<detailsType[]>([]);
   const [trendingShows, setTreandingShows] = useState<detailsType[]>([]);
-  const [genres, setGenres] = useState<gens>();
   useEffect(() => {
     const getData = async () => {
       const all = await getAllTrending();
@@ -34,29 +33,25 @@ export default function Home() {
 
   if (isLoading) {
     return (
-      <CircularProgress
-        aria-label="Loading..."
-        className="w-full h-full m-auto mt-44"
-      />
+      <Spinner aria-label="Loading..." className="w-full h-full m-auto mt-44" />
     );
   } else {
     return (
       <div className="home-container">
         <Swiper list={allTrending}></Swiper>
-
-        <div className="w-4/5 mx-auto my-16 bg-slate-950 py-8 rounded-xl">
+        <div className="w-10/12 mx-auto my-16 bg-slate-950 py-8 rounded-xl">
           <h1 className="font-bold text-xl ml-8 ">
             New Releases <small>(movies)</small>
           </h1>
           <Display1 list={trendingMovies}></Display1>
         </div>
-        <div className="w-4/5 mx-auto my-16 bg-zinc-900 py-8 rounded-xl">
+        <div className="w-10/12 mx-auto my-16 bg-zinc-900 py-8 rounded-xl">
           <h1 className="font-bold text-xl ml-8 ">
             New Releases <small>(Shows)</small>
           </h1>
           <Display1 list={trendingShows}></Display1>
         </div>
-        <div className="w-4/5 mx-auto my-16 bg-stone-900 p-8 rounded-xl">
+        <div className="w-10/12 mx-auto my-16 bg-stone-900 p-8 rounded-xl">
           <h1 className="font-bold text-xl">Discover</h1>
           <div className="py-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8 ">
             <Link href="/movies/genres">

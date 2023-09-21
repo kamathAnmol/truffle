@@ -1,12 +1,6 @@
 import { detailsType } from "@/app/api/fetchData";
 import { Swiper, SwiperSlide } from "swiper/react";
-import {
-  Navigation,
-  Pagination,
-  Scrollbar,
-  Autoplay,
-  Virtual,
-} from "swiper/modules";
+import { Navigation, Pagination, Autoplay, Virtual } from "swiper/modules";
 import Card1 from "../cardComponent/card1";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -20,14 +14,16 @@ const Display1 = (props: props) => {
   const { list } = props;
 
   return (
-    <div className="p-8">
+    <div className="p-8 w-11/12 mx-auto">
       <Swiper
-        modules={[Navigation, Pagination, Scrollbar, Autoplay, Virtual]}
+        modules={[Navigation, Pagination, Autoplay, Virtual]}
         spaceBetween={10}
         slidesPerView={5}
         navigation
         pagination={{ clickable: true }}
         virtual
+        preloadImages={false}
+        lazy={true}
       >
         {list.map((item, index) => {
           return (
