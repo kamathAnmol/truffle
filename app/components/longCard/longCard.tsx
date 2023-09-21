@@ -76,12 +76,12 @@ const LongCard = (props: cardProps) => {
       }}
       key={key}
     >
-      {/* {(item.media_type === "movie" || item.media_type === "tv") &&
+      {(item.media_type === "movie" || item.media_type === "tv") &&
         uid !== null && (
           <div className="absolute top-3 right-3 w-14  ">
             <HeartBtn type={item.media_type} id={item.id.toString()}></HeartBtn>
           </div>
-        )} */}
+        )}
       <Link href={`/details/${item.media_type}/${item.id}`}>
         <div
           className="bg-black/80 md:grid  md:flex-row p-8 rounded-md "

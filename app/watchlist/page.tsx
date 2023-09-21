@@ -1,15 +1,22 @@
 "use client";
-import { selectCurrentUser, watchListInterface } from "@/store/root-reducer";
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import {
+  selectCurrentUser,
+  setWatchlist,
+  watchListInterface,
+  watchListSelector,
+} from "@/store/root-reducer";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import Watchlist from "../components/watchlist/watchlist";
 import { Divider } from "@nextui-org/react";
 
 const WatchlistPage = () => {
-  const [watchlist, setWatchlist] = useState<watchListInterface | null>();
+  // const [watchlist, setWatchlist] = useState<watchListInterface>();
+  const watchlist = useSelector(watchListSelector);
 
   const uid = useSelector(selectCurrentUser);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchWatchlist = async () => {
@@ -22,11 +29,11 @@ const WatchlistPage = () => {
       });
       const data = await response.json();
       if (data.messege === "WatchList not found") {
-        setWatchlist(null);
-      } else setWatchlist(data.watchList);
+        dispatch(setWatchlist({} as watchListInterface));
+      } else dispatch(setWatchlist(data.watchList));
     };
     fetchWatchlist();
-  }, [uid]);
+  }, [uid, watchlist]);
 
   if (uid === null) {
     return (

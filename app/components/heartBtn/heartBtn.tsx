@@ -56,7 +56,7 @@ const HeartBtn = ({ type, id }: props) => {
     } else {
       setActive(false);
     }
-  }, [user, dispatch, watchList]);
+  }, [user, dispatch, watchList, id, type]);
 
   useEffect(() => {
     const updateWatchList = async () => {
@@ -90,16 +90,18 @@ const HeartBtn = ({ type, id }: props) => {
   const removeWatchlist = () => {
     let updatedWatchList = { ...watchList }; // Create a shallow copy
     if (type === "movie") {
+      setActive(false);
       updatedWatchList = {
         ...updatedWatchList,
         movieWatchList: updatedWatchList.movieWatchList.filter(
-          (id) => id !== id
+          (movieid) => movieid !== id
         ),
       };
     } else if (type === "tv") {
+      setActive(false);
       updatedWatchList = {
         ...updatedWatchList,
-        tvWatchList: updatedWatchList.tvWatchList.filter((id) => id !== id),
+        tvWatchList: updatedWatchList.tvWatchList.filter((tvId) => tvId !== id),
       };
     }
     dispatch(setWatchlist(updatedWatchList));

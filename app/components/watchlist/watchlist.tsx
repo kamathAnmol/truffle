@@ -5,13 +5,7 @@ import {
   genreInterface,
   img_base_uri,
 } from "@/app/api/fetchData";
-import {
-  selectCurrentUser,
-  watchListInterface,
-  watchListSelector,
-} from "@/store/root-reducer";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import HeartBtn from "../heartBtn/heartBtn";
 import Link from "next/link";
 import { Chip, Image, Progress } from "@nextui-org/react";
@@ -24,9 +18,7 @@ const Watchlist = (props: props) => {
   const { id, type } = props;
   const [details, setdetails] = useState<detailsType>();
   const [genres, setGenres] = useState<genreInterface[]>();
-  const [isLiked, setIsLiked] = useState<boolean>();
-  const watchlist: watchListInterface = useSelector(watchListSelector);
-  const uid = useSelector(selectCurrentUser);
+
   useEffect(() => {
     const fetchdata = async () => {
       const data = await fetchDetails(type, id);
@@ -51,21 +43,6 @@ const Watchlist = (props: props) => {
 
     fetchdata();
   }, [details, id, type]);
-
-  useEffect(() => {
-    const checkWatchList = () => {
-      if (details?.media_type === "movie") {
-        if (watchlist.movieWatchList.includes(details!?.id.toString()!))
-          setIsLiked(true);
-        else setIsLiked(false);
-      } else if (details!.media_type == "tv") {
-        if (watchlist.tvWatchList.includes(details!?.id.toString()!))
-          setIsLiked(true);
-        else setIsLiked(false);
-      }
-    };
-    details && checkWatchList();
-  }, [details, watchlist.movieWatchList, watchlist.tvWatchList]);
 
   const imgPath = (): string => {
     let img =
@@ -98,7 +75,6 @@ const Watchlist = (props: props) => {
       {(details?.media_type === "movie" || details?.media_type === "tv") && (
         <div className="absolute top-3 right-3 w-14  ">
           <HeartBtn
-            active={isLiked!}
             type={details.media_type}
             id={details.id.toString()}
           ></HeartBtn>
