@@ -163,7 +163,10 @@ const DetailPage = ({ params }: { params: { query: string[] } }) => {
                   <div className="flex gap-4">
                     {providers?.map((provider) => {
                       return (
-                        <Tooltip content={provider.provider_name}>
+                        <Tooltip
+                          content={provider.provider_name}
+                          key={provider.provider_id}
+                        >
                           <Image
                             src={`${img_base_uri}${provider.logo_path}`}
                             alt=""
