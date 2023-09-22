@@ -41,7 +41,7 @@ export default function Home() {
       setIsLoading(false);
     };
     getData();
-  }, []);
+  }, [dispatch]);
   if (isLoading) {
     return (
       <Spinner aria-label="Loading..." className="w-full h-full m-auto mt-44" />

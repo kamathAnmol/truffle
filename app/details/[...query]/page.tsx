@@ -66,7 +66,7 @@ const DetailPage = ({ params }: { params: { query: string[] } }) => {
 
     fetchData();
     setLoading(false);
-  }, [query]);
+  }, [query, countryCode]);
   const trailer = details?.videos?.results?.filter(
     (item) => item.type === "Trailer" && item.site === "YouTube"
   )[0];

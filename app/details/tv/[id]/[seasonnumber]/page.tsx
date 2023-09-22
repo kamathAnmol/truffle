@@ -20,7 +20,7 @@ const SeasonDetails = () => {
   };
   useEffect(() => {
     getSeason();
-  }, []);
+  }, [getSeason]);
 
   if (isLoading && seasonDetails?.poster_path === undefined)
     return <Spinner></Spinner>;

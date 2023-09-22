@@ -17,7 +17,7 @@ const MovieLanguages = () => {
   };
   useEffect(() => {
     getData();
-  }, [selected]);
+  }, [selected, getData]);
   return (
     <div>
       <div className="w-11/12 md:w-3/4 mx-auto flex gap-8 flex-col mt-20">

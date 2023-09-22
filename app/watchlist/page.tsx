@@ -33,7 +33,7 @@ const WatchlistPage = () => {
       } else dispatch(setWatchlist(data.watchList));
     };
     fetchWatchlist();
-  }, [uid, watchlist]);
+  }, [uid, watchlist, dispatch]);
 
   if (uid === null) {
     return (
