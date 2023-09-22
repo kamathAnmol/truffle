@@ -1,12 +1,19 @@
 "use client";
 
-import { detailsType, fetchLatest, getAllTrending } from "@/app/api/fetchData";
+import {
+  detailsType,
+  fetchLatest,
+  getAllTrending,
+  getLanguages,
+} from "@/app/api/fetchData";
 import React, { useEffect, useState } from "react";
 import { Button, Spinner } from "@nextui-org/react";
 import Display1 from "./components/display/display1";
 import { genreInterface } from "@/app/api/fetchData";
 import Link from "next/link";
 import Swiper from "./components/swiper/swiper";
+import { useDispatch, useSelector } from "react-redux";
+import { languagesSelector, setlanguages } from "@/store/root-reducer";
 interface gens {
   movie: genreInterface[];
   tv: genreInterface[];
@@ -17,6 +24,8 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [trendingMovies, setTreandingMovies] = useState<detailsType[]>([]);
   const [trendingShows, setTreandingShows] = useState<detailsType[]>([]);
+  const languages = useSelector(languagesSelector);
+  const dispatch = useDispatch();
   useEffect(() => {
     const getData = async () => {
       const all = await getAllTrending();
@@ -25,12 +34,13 @@ export default function Home() {
       setTreandingMovies(movies);
       const shows = await fetchLatest("tv");
       setTreandingShows(shows);
-
+      const lang = await getLanguages();
+      dispatch(setlanguages(lang));
       setIsLoading(false);
     };
     getData();
   }, []);
-
+  console.log(languages);
   if (isLoading) {
     return (
       <Spinner aria-label="Loading..." className="w-full h-full m-auto mt-44" />

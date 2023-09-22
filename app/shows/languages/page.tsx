@@ -7,12 +7,12 @@ import { Select, SelectItem } from "@nextui-org/react";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
-const MovieLanguages = () => {
+const ShowLanguages = () => {
   const { languages } = useSelector(languagesSelector);
-  const [selected, setSelected] = useState("hi");
+  const [selected, setSelected] = useState("en");
   const [data, setData] = useState<detailsType[]>();
   const getData = async () => {
-    const list = await getByLanguages("movie", selected);
+    const list = await getByLanguages("tv", selected);
     setData(list);
   };
   useEffect(() => {
@@ -36,7 +36,7 @@ const MovieLanguages = () => {
             setSelected(e.target.value);
           }}
           showScrollIndicators
-          defaultSelectedKeys={"hi"}
+          defaultSelectedKeys={"en"}
         >
           {languages.map((language: langInterface) => {
             return (
@@ -55,4 +55,4 @@ const MovieLanguages = () => {
   );
 };
 
-export default MovieLanguages;
+export default ShowLanguages;

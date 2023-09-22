@@ -1,4 +1,7 @@
 "use client";
+
+import { useDispatch } from "react-redux";
+
 // const apiKey = "bb393b7476beaebaea70ee092e45bb47";
 
 const apiKey = process.env.NEXT_PUBLIC_TMDB_API_KEY;
@@ -183,6 +186,7 @@ export interface seasonDetails {
 export const getAllTrending = async () => {
   const response = await fetch(`${baseUri}/trending/all/day?api_key=${apiKey}`);
   const data = await response.json();
+
   return data.results;
 };
 
@@ -251,5 +255,25 @@ export const fetchSeasonDetails = async (id: number, seasonNumber: number) => {
     `${baseUri}tv/${id}/season/${seasonNumber}?api_key=${apiKey}`
   );
   const data: seasonDetails = await response.json();
+  return data;
+};
+
+export const getLanguages = async () => {
+  const languagesRes = await fetch(
+    `${baseUri}configuration/languages?api_key=${apiKey}`
+  );
+  const languages = await languagesRes.json();
+  return languages;
+};
+
+export const getByLanguages = async (
+  type: string,
+  langId: string
+): Promise<detailsType[]> => {
+  const uri = `${baseUri}/discover/${type}?with_original_language=${langId}&api_key=${apiKey}&sort_by=popularity.desc`;
+  const response = await fetch(uri);
+  const result = await response.json();
+  const data: detailsType[] = result.results;
+  data.map((item) => (item.media_type = type));
   return data;
 };

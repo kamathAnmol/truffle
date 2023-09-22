@@ -35,7 +35,7 @@ const DetailPage = ({ params }: { params: { query: string[] } }) => {
     fetchData();
     setLoading(false);
   }, [query]);
-
+  console.log(details);
   let imgPath =
     "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg";
   if (details?.media_type === "movie" || details?.media_type === "tv") {

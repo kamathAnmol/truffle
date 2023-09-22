@@ -111,16 +111,55 @@ export const watchListSelector = createSelector(
 
 export const { setWatchlist } = watchListSlice.actions;
 const watchListReducer = watchListSlice.reducer;
+
+//languages reducer
+
+export interface langInterface {
+  name: string;
+  english_name: string;
+  iso_639_1: string;
+}
+export interface languageInterface {
+  languages: langInterface[];
+}
+
+const initialLanguages: languageInterface = {
+  languages: [],
+};
+
+const languagesSlice = createSlice({
+  name: "languages",
+  initialState: initialLanguages,
+  reducers: {
+    setlanguages(state, action: PayloadAction<langInterface[]>) {
+      state.languages = action.payload;
+    },
+  },
+});
+const languageReducer = languagesSlice.reducer;
+export const { setlanguages } = languagesSlice.actions;
+
+const languagesState = (state: rootInterface) => {
+  return state.languages;
+};
+
+export const languagesSelector = createSelector(
+  [languagesState],
+  (languages) => languages
+);
+
 //root reducer
 
 export interface rootInterface {
   modal: modalInterface;
   user: userInterface;
   watchList: watchListInterface;
+  languages: languageInterface;
 }
 
 export const rootReducer = combineReducers({
   modal: modalReducer,
   user: userReducer,
   watchList: watchListReducer,
+  languages: languageReducer,
 });
