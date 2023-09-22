@@ -2,13 +2,28 @@
 
 import {
   Person,
+  WatchProvider,
+  WatchProvidersInterface,
   detailsType,
   fetchCredits,
   fetchDetails,
+  getWatchProviders,
   img_base_uri,
 } from "@/app/api/fetchData";
-import { selectCurrentUser } from "@/store/root-reducer";
-import { Chip, Image, Progress, Spinner } from "@nextui-org/react";
+import { loactionSelector, selectCurrentUser } from "@/store/root-reducer";
+import {
+  Button,
+  Chip,
+  Image,
+  Progress,
+  Spinner,
+  Tooltip,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  useDisclosure,
+} from "@nextui-org/react";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import HeartBtn from "@/app/components/heartBtn/heartBtn";
@@ -21,7 +36,9 @@ const DetailPage = ({ params }: { params: { query: string[] } }) => {
   const [crew, setCrew] = useState<Person[]>();
   const [cast, setCast] = useState<Person[]>();
   const [isLoading, setLoading] = useState<Boolean>(true);
-
+  const [providers, setProviders] = useState<WatchProvider[]>();
+  const countryCode = useSelector(loactionSelector);
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const uid = useSelector(selectCurrentUser);
 
   useEffect(() => {
@@ -31,16 +48,32 @@ const DetailPage = ({ params }: { params: { query: string[] } }) => {
       const getCredits = await fetchCredits(query[0], query[1]);
       setCast(getCredits.cast);
       setCrew(getCredits.crew);
+      const watchData: WatchProvidersInterface = await getWatchProviders(
+        query[0],
+        +query[1]
+      );
+      if (watchData.results !== undefined)
+        if (watchData.results[countryCode] !== undefined) {
+          const countrydata = watchData.results[countryCode];
+          const tempProvider = new Set<WatchProvider>();
+          countrydata.ads?.map((item) => tempProvider.add(item));
+          countrydata.buy?.map((item) => tempProvider.add(item));
+          countrydata.flatrate?.map((item) => tempProvider.add(item));
+          countrydata.rent?.map((item) => tempProvider.add(item));
+          setProviders(Array.from(tempProvider));
+        }
     };
+
     fetchData();
     setLoading(false);
   }, [query]);
-  console.log(details);
+  const trailer = details?.videos?.results?.filter(
+    (item) => item.type === "Trailer" && item.site === "YouTube"
+  )[0];
   let imgPath =
     "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg";
   if (details?.media_type === "movie" || details?.media_type === "tv") {
     imgPath = `${img_base_uri}${details.poster_path}`;
-    console.log(imgPath);
   } else {
     imgPath = `${img_base_uri}${details?.profile_path}`;
   }
@@ -120,8 +153,65 @@ const DetailPage = ({ params }: { params: { query: string[] } }) => {
                   return <Chip key={genre.id}>{genre.name}</Chip>;
                 })}
               </div>
+
               {details?.tagline && (
                 <p className=" opacity-75">{details?.tagline}</p>
+              )}
+              {providers?.length! > 0 && (
+                <div>
+                  <h1 className=" font-bold text-lg mb-4">Available in:</h1>
+                  <div className="flex gap-4">
+                    {providers?.map((provider) => {
+                      return (
+                        <Tooltip content={provider.provider_name}>
+                          <Image
+                            src={`${img_base_uri}${provider.logo_path}`}
+                            alt=""
+                            key={provider.provider_id}
+                            className=" rounded-full h-8 w-8"
+                          ></Image>
+                        </Tooltip>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+              {trailer !== null && trailer !== undefined && (
+                <>
+                  <Tooltip content="watch Trailer">
+                    <Button
+                      variant="bordered"
+                      color="danger"
+                      onPress={onOpen}
+                      className="w-fit"
+                    >
+                      Trailer
+                    </Button>
+                  </Tooltip>
+                  <Modal
+                    isOpen={isOpen}
+                    onOpenChange={onOpenChange}
+                    size="5xl"
+                    backdrop="blur"
+                  >
+                    <ModalContent>
+                      {(onClose) => (
+                        <>
+                          <ModalHeader className="flex flex-col gap-1">
+                            Trailer
+                          </ModalHeader>
+                          <ModalBody>
+                            <iframe
+                              height={600}
+                              src={`https://www.youtube.com/embed/${trailer?.key}`}
+                              className=" rounded-md p-8"
+                            ></iframe>
+                          </ModalBody>
+                        </>
+                      )}
+                    </ModalContent>
+                  </Modal>
+                </>
               )}
               {details?.overview && <p>{details.overview}</p>}
             </div>

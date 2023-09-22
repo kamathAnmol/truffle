@@ -12,8 +12,8 @@ import Display1 from "./components/display/display1";
 import { genreInterface } from "@/app/api/fetchData";
 import Link from "next/link";
 import Swiper from "./components/swiper/swiper";
-import { useDispatch, useSelector } from "react-redux";
-import { languagesSelector, setlanguages } from "@/store/root-reducer";
+import { useDispatch } from "react-redux";
+import { setClientLocation, setlanguages } from "@/store/root-reducer";
 interface gens {
   movie: genreInterface[];
   tv: genreInterface[];
@@ -24,10 +24,12 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [trendingMovies, setTreandingMovies] = useState<detailsType[]>([]);
   const [trendingShows, setTreandingShows] = useState<detailsType[]>([]);
-  const languages = useSelector(languagesSelector);
   const dispatch = useDispatch();
   useEffect(() => {
     const getData = async () => {
+      const userLocation = await fetch("https://ipapi.co/json/");
+      const result = await userLocation.json();
+      dispatch(setClientLocation(result.country_code));
       const all = await getAllTrending();
       setAllTrending(all);
       const movies = await fetchLatest("movie");
@@ -40,7 +42,6 @@ export default function Home() {
     };
     getData();
   }, []);
-  console.log(languages);
   if (isLoading) {
     return (
       <Spinner aria-label="Loading..." className="w-full h-full m-auto mt-44" />

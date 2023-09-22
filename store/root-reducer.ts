@@ -148,6 +148,35 @@ export const languagesSelector = createSelector(
   (languages) => languages
 );
 
+//loactionInterface
+
+export interface clInterface {
+  countryCode: string;
+}
+
+const initialLoaction: clInterface = {
+  countryCode: "",
+};
+
+const loactionSlice = createSlice({
+  name: "location",
+  initialState: initialLoaction,
+  reducers: {
+    setClientLocation(state, action: PayloadAction<string>) {
+      state.countryCode = action.payload;
+    },
+  },
+});
+export const { setClientLocation } = loactionSlice.actions;
+
+const loactionState = (state: rootInterface) => {
+  return state.location;
+};
+
+export const loactionSelector = createSelector(
+  [loactionState],
+  (location) => location.countryCode
+);
 //root reducer
 
 export interface rootInterface {
@@ -155,6 +184,7 @@ export interface rootInterface {
   user: userInterface;
   watchList: watchListInterface;
   languages: languageInterface;
+  location: clInterface;
 }
 
 export const rootReducer = combineReducers({
@@ -162,4 +192,5 @@ export const rootReducer = combineReducers({
   user: userReducer,
   watchList: watchListReducer,
   languages: languageReducer,
+  location: loactionSlice.reducer,
 });

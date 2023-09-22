@@ -8,6 +8,7 @@ const apiKey = process.env.NEXT_PUBLIC_TMDB_API_KEY;
 // console.log(apiKey);
 const baseUri = "https://api.themoviedb.org/3/";
 export const img_base_uri = "https://image.tmdb.org/t/p/original";
+export const youtubeBaseUri = "https://www.youtube.com/watch?v=";
 export interface MediaItem {
   adult: boolean;
   backdrop_path: string | null;
@@ -37,6 +38,34 @@ export interface genreInterface {
   id: number;
   name: string;
 }
+
+export interface WatchProvider {
+  provider_id: number;
+  provider_name: string;
+  logo_path: string | null;
+  display_priority: number;
+}
+
+export interface WatchProvidersInterface {
+  id: number; // The movie or TV show ID
+  results: {
+    [countryCode: string]: {
+      link: string | null;
+      buy: WatchProvider[] | null;
+      rent: WatchProvider[] | null;
+      flatrate: WatchProvider[] | null;
+      ads: WatchProvider[] | null;
+    };
+  };
+}
+
+export interface countryInterface {
+  link: string | null;
+  buy: WatchProvider[] | null;
+  rent: WatchProvider[] | null;
+  flatrate: WatchProvider[] | null;
+  ads: WatchProvider[] | null;
+}
 interface KnownFor {
   adult: boolean;
   backdrop_path: string | null;
@@ -56,7 +85,7 @@ interface KnownFor {
   vote_average: number;
   vote_count: number;
   origin_country?: string[]; // For TV shows and TV seasons
-  video?: boolean; // For movies
+  video?: boolean;
 }
 
 export interface detailsType {
@@ -87,7 +116,9 @@ export interface detailsType {
   video?: boolean;
   vote_average: number;
   vote_count: number;
-
+  videos?: {
+    results?: videosInterface[];
+  };
   created_by?: any[];
   episode_run_time?: number[];
   first_air_date?: string;
@@ -119,6 +150,19 @@ export interface detailsType {
   known_for_department?: string;
   place_of_birth?: string;
   profile_path?: string | null;
+}
+
+export interface videosInterface {
+  iso_639_1: string;
+  iso_3166_1: string;
+  name: string;
+  key: string;
+  published_at: string;
+  site: string;
+  size: number;
+  type: string;
+  official: boolean;
+  id: string;
 }
 
 export interface Person {
@@ -205,7 +249,9 @@ export const fetchDetails = async (
   type: string,
   id: string
 ): Promise<detailsType> => {
-  const response = await fetch(`${baseUri}${type}/${id}?api_key=${apiKey}`);
+  const response = await fetch(
+    `${baseUri}${type}/${id}?api_key=${apiKey}&append_to_response=videos`
+  );
   const data: detailsType = await response.json();
   data.media_type = type;
   data.genre_ids = data.genres?.map((genre) => genre.id);
@@ -276,4 +322,15 @@ export const getByLanguages = async (
   const data: detailsType[] = result.results;
   data.map((item) => (item.media_type = type));
   return data;
+};
+
+export const getWatchProviders = async (
+  type: string,
+  id: number | undefined
+): Promise<WatchProvidersInterface> => {
+  const response = await fetch(
+    `${baseUri}${type}/${id!}/watch/providers?api_key=${apiKey}`
+  );
+  const results = await response.json();
+  return results;
 };
