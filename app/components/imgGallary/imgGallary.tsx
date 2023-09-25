@@ -24,7 +24,7 @@ const ImgGallary = ({ imgs }: Props) => {
       <div className="grid grid-cols-3 md:grid-cols-5 xl:grid-cols-7 gap-4 my-4">
         {imgs.map((img, index) => {
           return (
-            <div>
+            <div key={index}>
               <Image
                 src={img}
                 onClick={() => showImg(index)}
