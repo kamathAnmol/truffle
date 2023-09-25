@@ -23,18 +23,23 @@ import {
   ModalHeader,
   ModalBody,
   useDisclosure,
+  Tabs,
+  Tab,
 } from "@nextui-org/react";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import HeartBtn from "@/app/components/heartBtn/heartBtn";
 import Display3 from "@/app/components/display/display3";
 import Display4 from "@/app/components/display/display4";
+import ImgGallary from "@/app/components/imgGallary/imgGallary";
+import VideoGallary from "@/app/components/videoGallary/videoGallary";
 
 const DetailPage = ({ params }: { params: { query: string[] } }) => {
   const query = params.query;
   const [details, setDetails] = useState<detailsType>();
   const [crew, setCrew] = useState<Person[]>();
   const [cast, setCast] = useState<Person[]>();
+
   const [isLoading, setLoading] = useState<Boolean>(true);
   const [providers, setProviders] = useState<WatchProvider[]>();
   const countryCode = useSelector(loactionSelector);
@@ -70,6 +75,16 @@ const DetailPage = ({ params }: { params: { query: string[] } }) => {
   const trailer = details?.videos?.results?.filter(
     (item) => item.type === "Trailer" && item.site === "YouTube"
   )[0];
+  const imgList: string[] = [];
+  details?.images.backdrops.map((img) =>
+    imgList.push(`${img_base_uri}${img.file_path}`)
+  );
+  details?.images.posters.map((img) =>
+    imgList.push(`${img_base_uri}${img.file_path}`)
+  );
+  details?.images.logos.map((img) =>
+    imgList.push(`${img_base_uri}${img.file_path}`)
+  );
   let imgPath =
     "https://upload.wikimedia.org/wikipedia/commons/a/ac/No_image_available.svg";
   if (details?.media_type === "movie" || details?.media_type === "tv") {
@@ -208,6 +223,7 @@ const DetailPage = ({ params }: { params: { query: string[] } }) => {
                               height={600}
                               src={`https://www.youtube.com/embed/${trailer?.key}`}
                               className=" rounded-md p-8"
+                              allowFullScreen
                             ></iframe>
                           </ModalBody>
                         </>
@@ -220,20 +236,49 @@ const DetailPage = ({ params }: { params: { query: string[] } }) => {
             </div>
           </div>
         </div>
-        <div className=" bg-stone-900 rounded-md p-8 w-4/5 mx-auto my-8">
-          <h1 className="font-bold text-2xl">Cast</h1>
-          <Display3 list={cast} key={query[1]}></Display3>
+        <div className="w-4/5 mx-auto my-8">
+          <Tabs size="lg" disableAnimation>
+            <Tab key="Cast" title="Cast">
+              <div className=" bg-stone-900 rounded-md p-8  my-8">
+                <h1 className="font-bold text-2xl">Cast</h1>
+                <Display3 list={cast} key={query[1]}></Display3>
+              </div>
+            </Tab>
+            <Tab key="Crew" title="Crew">
+              <div className=" bg-stone-900 rounded-md p-8  my-8">
+                <h1 className="font-bold text-2xl">Crew</h1>
+                <Display3 list={crew} key={query[1]}></Display3>
+              </div>
+            </Tab>
+            {details?.media_type === "tv" && (
+              <Tab title="Seasons" key={"Seasons"}>
+                <div className=" bg-stone-900 rounded-md p-8 my-8">
+                  <h1 className="font-bold text-2xl">Seasons</h1>
+                  <Display4
+                    seasons={details.seasons}
+                    id={details.id}
+                  ></Display4>
+                </div>
+              </Tab>
+            )}
+            <Tab title={`Images(${imgList.length})`} key="Images">
+              <div className=" bg-stone-900 rounded-md p-8 my-8">
+                <h1 className="font-bold text-2xl">Images</h1>
+
+                <ImgGallary imgs={imgList}></ImgGallary>
+              </div>
+            </Tab>
+            <Tab
+              title={`Videos(${details?.videos?.results?.length})`}
+              key="Videos"
+            >
+              <div className=" bg-stone-900 rounded-md p-8 my-8">
+                <h1 className="font-bold text-2xl">Videos</h1>
+                <VideoGallary videos={details?.videos?.results}></VideoGallary>
+              </div>
+            </Tab>
+          </Tabs>
         </div>
-        <div className=" bg-stone-900 rounded-md p-8 w-4/5 mx-auto my-8">
-          <h1 className="font-bold text-2xl">Crew</h1>
-          <Display3 list={crew} key={query[1]}></Display3>
-        </div>
-        {details?.media_type === "tv" && (
-          <div className=" bg-stone-900 rounded-md p-8 w-4/5 mx-auto my-8">
-            <h1 className="font-bold text-2xl">Seasons</h1>
-            <Display4 seasons={details.seasons} id={details.id}></Display4>
-          </div>
-        )}
       </div>
     );
   } else {

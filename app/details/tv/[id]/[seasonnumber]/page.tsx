@@ -13,14 +13,15 @@ const SeasonDetails = () => {
   const { id, seasonnumber } = useParams();
   const [seasonDetails, setSeasonDetails] = useState<seasonDetails>();
   const [isLoading, setIsloading] = useState<boolean>(true);
-  const getSeason = async () => {
-    const data = await fetchSeasonDetails(+id, +seasonnumber);
-    setSeasonDetails(data);
-    setIsloading(false);
-  };
+
   useEffect(() => {
+    const getSeason = async () => {
+      const data = await fetchSeasonDetails(+id, +seasonnumber);
+      setSeasonDetails(data);
+      setIsloading(false);
+    };
     getSeason();
-  }, [getSeason]);
+  }, []);
 
   if (isLoading && seasonDetails?.poster_path === undefined)
     return <Spinner></Spinner>;

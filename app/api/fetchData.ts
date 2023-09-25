@@ -119,6 +119,12 @@ export interface detailsType {
   videos?: {
     results?: videosInterface[];
   };
+  images: {
+    backdrops: imgInterface[];
+    posters: imgInterface[];
+    loops: imgInterface[];
+    logos: imgInterface[];
+  };
   created_by?: any[];
   episode_run_time?: number[];
   first_air_date?: string;
@@ -226,6 +232,15 @@ export interface seasonDetails {
   season_number: number;
   vote_average: number;
 }
+export interface imgInterface {
+  aspect_ratio: number;
+  height: number;
+  iso_639_1: string;
+  file_path: string;
+  vote_average: number;
+  vote_count: number;
+  width: number;
+}
 
 export const getAllTrending = async () => {
   const response = await fetch(`${baseUri}/trending/all/day?api_key=${apiKey}`);
@@ -250,9 +265,10 @@ export const fetchDetails = async (
   id: string
 ): Promise<detailsType> => {
   const response = await fetch(
-    `${baseUri}${type}/${id}?api_key=${apiKey}&append_to_response=videos`
+    `${baseUri}${type}/${id}?api_key=${apiKey}&append_to_response=videos,images`
   );
   const data: detailsType = await response.json();
+  4;
   data.media_type = type;
   data.genre_ids = data.genres?.map((genre) => genre.id);
   return data;

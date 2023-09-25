@@ -11,13 +11,14 @@ const MovieLanguages = () => {
   const { languages } = useSelector(languagesSelector);
   const [selected, setSelected] = useState("hi");
   const [data, setData] = useState<detailsType[]>();
-  const getData = async () => {
-    const list = await getByLanguages("movie", selected);
-    setData(list);
-  };
+
   useEffect(() => {
+    const getData = async () => {
+      const list = await getByLanguages("movie", selected);
+      setData(list);
+    };
     getData();
-  }, [selected, getData]);
+  }, [selected]);
   return (
     <div>
       <div className="w-11/12 md:w-3/4 mx-auto flex gap-8 flex-col mt-20">
