@@ -30,6 +30,7 @@ const VideoGallary = ({ videos }: Props) => {
             onClick={() => showVideo(index)}
             loading="lazy"
             alt=""
+            key={index}
           ></Image>
         ))}
       </div>

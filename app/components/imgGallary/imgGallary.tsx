@@ -30,6 +30,7 @@ const ImgGallary = ({ imgs }: Props) => {
                 onClick={() => showImg(index)}
                 loading="lazy"
                 alt=""
+                key={index}
               ></Image>
             </div>
           );
