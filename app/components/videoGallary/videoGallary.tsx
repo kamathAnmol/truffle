@@ -29,6 +29,7 @@ const VideoGallary = ({ videos }: Props) => {
             src={`https://img.youtube.com/vi/${video.key}/0.jpg`}
             onClick={() => showVideo(index)}
             loading="lazy"
+            alt=""
           ></Image>
         ))}
       </div>

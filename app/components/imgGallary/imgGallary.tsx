@@ -29,6 +29,7 @@ const ImgGallary = ({ imgs }: Props) => {
                 src={img}
                 onClick={() => showImg(index)}
                 loading="lazy"
+                alt=""
               ></Image>
             </div>
           );
@@ -58,6 +59,7 @@ const ImgGallary = ({ imgs }: Props) => {
                     src={imgs[currentImg!]}
                     className="p-8 rounded-md "
                     style={{ maxHeight: "800px" }}
+                    alt=""
                   ></Image>
                   <Button
                     variant="ghost"

@@ -21,7 +21,7 @@ const SeasonDetails = () => {
       setIsloading(false);
     };
     getSeason();
-  }, []);
+  }, [id, seasonnumber]);
 
   if (isLoading && seasonDetails?.poster_path === undefined)
     return <Spinner></Spinner>;
