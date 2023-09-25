@@ -1,14 +1,7 @@
 import { Person } from "@/app/api/fetchData";
 import React from "react";
 import { Swiper, SwiperProps, SwiperSlide } from "swiper/react";
-import {
-  Navigation,
-  Pagination,
-  Scrollbar,
-  Autoplay,
-  Virtual,
-  Lazy,
-} from "swiper/modules";
+import { Navigation, Pagination, Autoplay, Virtual } from "swiper/modules";
 import Card3 from "../cardComponent/card3";
 import "swiper/css";
 import "swiper/css/navigation";
@@ -24,11 +17,10 @@ interface lazyProps extends SwiperProps {
 const Display3 = (props: props) => {
   const { list } = props;
   const swiperProps: lazyProps = {
-    modules: [Navigation, Pagination, Autoplay, Virtual],
+    modules: [Navigation, Autoplay, Virtual],
     spaceBetween: 10,
     slidesPerView: 5,
     navigation: true,
-    pagination: { clickable: true },
     virtual: true,
     preloadImages: false,
     lazy: true,
