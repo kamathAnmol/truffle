@@ -350,3 +350,15 @@ export const getWatchProviders = async (
   const results = await response.json();
   return results;
 };
+
+export const fetchSimilar = async (
+  type: string,
+  id: string
+): Promise<detailsType[]> => {
+  const response = await fetch(
+    `${baseUri}${type}/${id}/similar?api_key=${apiKey}`
+  );
+  const data = await response.json();
+
+  return data.results;
+};

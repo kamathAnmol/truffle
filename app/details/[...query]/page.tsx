@@ -7,6 +7,7 @@ import {
   detailsType,
   fetchCredits,
   fetchDetails,
+  fetchSimilar,
   getWatchProviders,
   img_base_uri,
 } from "@/app/api/fetchData";
@@ -33,6 +34,7 @@ import Display3 from "@/app/components/display/display3";
 import Display4 from "@/app/components/display/display4";
 import ImgGallary from "@/app/components/imgGallary/imgGallary";
 import VideoGallary from "@/app/components/videoGallary/videoGallary";
+import Display1 from "@/app/components/display/display1";
 
 const DetailPage = ({ params }: { params: { query: string[] } }) => {
   const query = params.query;
@@ -42,6 +44,7 @@ const DetailPage = ({ params }: { params: { query: string[] } }) => {
 
   const [isLoading, setLoading] = useState<Boolean>(true);
   const [providers, setProviders] = useState<WatchProvider[]>();
+  const [similar, setSimilar] = useState<detailsType[]>();
   const countryCode = useSelector(loactionSelector);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const uid = useSelector(selectCurrentUser);
@@ -67,6 +70,9 @@ const DetailPage = ({ params }: { params: { query: string[] } }) => {
           countrydata.rent?.map((item) => tempProvider.add(item));
           setProviders(Array.from(tempProvider));
         }
+      const getSimilar = await fetchSimilar(query[0], query[1]);
+      setSimilar(getSimilar);
+      console.log(similar);
     };
 
     fetchData();
@@ -248,6 +254,12 @@ const DetailPage = ({ params }: { params: { query: string[] } }) => {
               <div className=" bg-stone-900 rounded-md p-8  my-8">
                 <h1 className="font-bold text-2xl">Crew</h1>
                 <Display3 list={crew} key={query[1]}></Display3>
+              </div>
+            </Tab>
+            <Tab title="Similar" key={"similar"}>
+              <div className=" bg-stone-900 rounded-md p-8  my-8">
+                <h1 className="font-bold text-2xl">Similar</h1>
+                <Display1 list={similar!} key={query[1]}></Display1>
               </div>
             </Tab>
             {details?.media_type === "tv" && (

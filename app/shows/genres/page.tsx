@@ -46,7 +46,7 @@ const ShowGenre = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const getShows = useCallback(async () => {
-    const data = await fetchByGenre("movie", selected);
+    const data = await fetchByGenre("tv", selected);
     setShows(data);
   }, [selected]);
 
