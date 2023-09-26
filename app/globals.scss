@@ -42,30 +42,21 @@ body {
     rgba(0, 0, 0, 1) 100%
   );
 }
-.swiper-button-next,
-.swiper-button-prev {
-  padding: 2rem;
-  border-radius: 50px;
-  background: rgba(0, 0, 0, 0.3);
-  -webkit-backdrop-filter: blur(10px);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(0, 0, 0, 0.15);
-  left: -60%;
-  position: absolute;
-  top: 10%;
-  &::after {
-    color: white;
+
+.bullets-container {
+  width: fit-content !important;
+  margin: 0 auto;
+  span {
+    width: 5px;
+    height: 5px;
+    background-color: white;
+    margin: auto 5px;
   }
 }
-
-span.swiper-pagination-bullet.swiper-pagination-bullet-active {
-  background-color: rgb(0, 98, 163);
-}
-span.swiper-pagination-bullet {
-  background-color: white;
-  opacity: 0.7;
-}
-
-.swiper-pagination {
-  position: absolute;
+.dynamic-bullets-container {
+  margin: 0 auto;
+  overflow-x: hidden;
+  span {
+    background-color: white;
+  }
 }

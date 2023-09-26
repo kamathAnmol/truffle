@@ -5,9 +5,10 @@ import {
   fetchLatest,
   getAllTrending,
   getLanguages,
+  img_base_uri,
 } from "@/app/api/fetchData";
 import React, { useEffect, useState } from "react";
-import { Button, Spinner } from "@nextui-org/react";
+import { Button, Image, Spinner } from "@nextui-org/react";
 import Display1 from "./components/display/display1";
 import { genreInterface } from "@/app/api/fetchData";
 import Link from "next/link";
@@ -50,13 +51,27 @@ export default function Home() {
     return (
       <div className="home-container">
         <Swiper list={allTrending}></Swiper>
-        <div className="w-10/12 mx-auto my-16 bg-slate-950 py-8 rounded-xl">
-          <h1 className="font-bold text-xl ml-8 ">
+        <div className="w-full md:w-10/12 mx-2 md:mx-auto my-16 py-8 rounded-xl bg-center relative overflow-hidden">
+          <Image
+            src={`${img_base_uri}${trendingMovies.at(0)?.backdrop_path}`}
+            className=" blur-sm z-0 brightness-50"
+            classNames={{
+              wrapper: "absolute w-full h-full top-20 left-0 ",
+            }}
+          ></Image>
+          <h1 className="font-bold text-xl ml-8 z-10">
             New Releases <small>(movies)</small>
           </h1>
           <Display1 list={trendingMovies}></Display1>
         </div>
-        <div className="w-10/12 mx-auto my-16 bg-zinc-900 py-8 rounded-xl">
+        <div className="w-full md:w-10/12 mx-2 md:mx-auto my-16  py-8 rounded-xl px-3 relative overflow-hidden">
+          <Image
+            src={`${img_base_uri}${trendingShows.at(0)?.backdrop_path}`}
+            className=" blur-sm z-0 brightness-50"
+            classNames={{
+              wrapper: "absolute w-full h-full top-20 left-0",
+            }}
+          ></Image>
           <h1 className="font-bold text-xl ml-8 ">
             New Releases <small>(Shows)</small>
           </h1>

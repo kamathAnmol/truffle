@@ -8,7 +8,7 @@ import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@nextui-org/react";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface props {
   list: detailsType[];
@@ -21,15 +21,20 @@ const Display1 = (props: props) => {
   const prevRef = useRef(null);
   const nextRef = useRef(null);
   const paginatonRef = useRef(null);
+  const [prevState, setPrevState] = useState<HTMLButtonElement | undefined>();
+  useEffect(() => {
+    if (prevRef.current) setPrevState(prevRef.current);
+  }, [prevRef.current]);
+
   const { list } = props;
   const swiperProps: lazyProps = {
     modules: [Navigation, Autoplay, Virtual, Pagination],
     spaceBetween: 10,
-    slidesPerView: 5,
+
     slidesPerGroup: 3,
     navigation: {
       nextEl: nextRef.current,
-      prevEl: prevRef.current,
+      prevEl: prevState,
     },
     virtual: true,
     preloadImages: false,
@@ -37,7 +42,6 @@ const Display1 = (props: props) => {
     pagination: {
       clickable: true,
       el: paginatonRef.current,
-      type: "bullets",
     },
 
     breakpoints: {
@@ -47,15 +51,18 @@ const Display1 = (props: props) => {
       768: {
         slidesPerView: 4,
       },
+      1600: {
+        slidesPerView: 5,
+      },
     },
   };
 
   return (
-    <div className="relative">
-      <div className="md:p-8 w-full mx-auto relative flex items-center">
+    <div className="relative w-full">
+      <div className=" px-3 md:p-8 w-full mx-auto relative flex items-center">
         <Button
           ref={prevRef}
-          className=""
+          className=" hidden md:flex"
           isIconOnly
           variant="flat"
           radius="full"
@@ -75,7 +82,7 @@ const Display1 = (props: props) => {
 
         <Button
           ref={nextRef}
-          className=""
+          className=" hidden md:flex"
           isIconOnly
           variant="flat"
           radius="full"
@@ -86,7 +93,7 @@ const Display1 = (props: props) => {
       </div>
       <div
         ref={paginatonRef}
-        className="flex gap-1 md:gap-4 mx-auto w-fit"
+        className="bullets-container bg-black/40 px-4 rounded-3xl py-1"
       ></div>
     </div>
   );

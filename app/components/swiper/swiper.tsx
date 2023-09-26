@@ -1,35 +1,34 @@
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 
-import { Swiper, SwiperSlide, useSwiper } from "swiper/react";
+import { Swiper, SwiperSlide } from "swiper/react";
 
 // Import Swiper styles
 import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
-import "swiper/css/scrollbar";
 import "swiper/css/autoplay";
 import { detailsType, img_base_uri } from "@/app/api/fetchData";
 import { Button, Image, Progress } from "@nextui-org/react";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useRef } from "react";
+import { RefObject, useEffect, useRef, useState } from "react";
 
 interface props {
   list: detailsType[];
 }
 
 const SwiperComponent = ({ list }: props) => {
-  const prevRef = useRef(null);
-  const nextRef = useRef(null);
-  const paginatonRef = useRef(null);
-
+  const prevRef = useRef<HTMLButtonElement>(null);
+  const nextRef = useRef<HTMLButtonElement>(null);
+  const paginatonRef = useRef<HTMLDivElement>(null);
+  const [prevState, setPrevState] = useState<HTMLButtonElement | undefined>();
+  useEffect(() => {
+    if (prevRef.current) setPrevState(prevRef.current);
+  }, [prevRef.current]);
   return (
     <div className="relative">
       <Button
         ref={prevRef}
-        className="absolute top-1/3 z-50 left-8"
+        className="absolute top-1/3 z-50 left-8 hidden md:flex"
         isIconOnly
-        variant="flat"
         radius="full"
         size="lg"
       >
@@ -41,7 +40,8 @@ const SwiperComponent = ({ list }: props) => {
         slidesPerView={1.7}
         breakpoints={{
           240: {
-            slidesPerView: 1,
+            slidesPerView: 1.3,
+            spaceBetween: 10,
           },
           768: {
             slidesPerView: 2,
@@ -49,7 +49,7 @@ const SwiperComponent = ({ list }: props) => {
         }}
         centeredSlides={true}
         navigation={{
-          prevEl: prevRef.current,
+          prevEl: prevState,
           nextEl: nextRef.current,
         }}
         loop={true}
@@ -99,15 +99,11 @@ const SwiperComponent = ({ list }: props) => {
           );
         })}
       </Swiper>
-      <div
-        ref={paginatonRef}
-        className="w-fit flex gap-1 md:gap-4 mx-auto"
-      ></div>
+      <div ref={paginatonRef} className="bullets-container w-fit"></div>
       <Button
         ref={nextRef}
-        className="absolute top-1/3 z-50 right-8"
+        className="absolute top-1/3 z-50 right-8 hidden md:flex"
         isIconOnly
-        variant="flat"
         radius="full"
         size="lg"
       >

@@ -19,7 +19,7 @@ const Card1 = (props: props) => {
         isPressable
         isBlurred
         shadow="sm"
-        className="relative w-36 md:w-48 xl:w-60"
+        className="relative w-32 md:w-48 xl:w-60"
         style={{ maxWidth: "250px" }}
       >
         <CardHeader className="relative">
