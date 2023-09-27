@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from "react";
 
 import {
-  MediaItem,
   detailsType,
   fetchGenres,
   genreInterface,
@@ -19,14 +18,13 @@ import {
 } from "@/store/root-reducer";
 import HeartBtn from "../heartBtn/heartBtn";
 interface cardProps {
-  item: MediaItem | detailsType;
+  item: detailsType;
   key: number;
 }
 
 const LongCard = (props: cardProps) => {
   const { item, key } = props;
   const [genres, setGenres] = useState<genreInterface[]>();
-  const [isLiked, setIsLiked] = useState<boolean>();
   const uid = useSelector(selectCurrentUser);
 
   const watchlist: watchListInterface = useSelector(watchListSelector);

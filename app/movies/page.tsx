@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { detailsType, fetchLatest } from "../api/fetchData";
 import Swiper from "../components/swiper/swiper";
+import { Spinner } from "@nextui-org/react";
 
 const MoviesComponent = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -15,11 +16,13 @@ const MoviesComponent = () => {
     };
     getData();
   }, []);
-  return (
-    <div>
-      <Swiper list={trendingMovies}></Swiper>
-    </div>
-  );
+  if (isLoading) return <Spinner></Spinner>;
+  else
+    return (
+      <div>
+        <Swiper list={trendingMovies}></Swiper>
+      </div>
+    );
 };
 
 export default MoviesComponent;

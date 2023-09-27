@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { search, MediaItem } from "@/app/api/fetchData";
+import { detailsType, search } from "@/app/api/fetchData";
 import { RadioGroup, Radio, cn, RadioProps } from "@nextui-org/react";
 import "./styles.scss";
 import LongCard from "@/app/components/longCard/longCard";
@@ -47,11 +47,11 @@ const SearchPage = ({ params }: { params: { query: string } }) => {
   const [selected, setSelected] = useState<"movie" | "tv" | "person" | "multi">(
     "multi"
   );
-  const [searchResults, setSearchResults] = useState<MediaItem[]>([]);
+  const [searchResults, setSearchResults] = useState<detailsType[]>([]);
   const query = new String(params.query).replace("%20", " ");
   useEffect(() => {
     const updateSearch = async () => {
-      const data: MediaItem[] = await search(selected, query);
+      const data: detailsType[] = await search(selected, query);
       if (selected === "multi") {
         setSearchResults(data);
       } else {
@@ -108,48 +108,6 @@ const SearchPage = ({ params }: { params: { query: string } }) => {
             })}
           </div>
         </div>
-
-        // <div>
-        //   {searchResults.filter((item) => item.media_type === "movie").length >
-        //     0 && (
-        //     <>
-        //       <h1 className=" capitalize font-bold text-4xl my-7">Movies</h1>
-        //       <div className="flex flex-col gap-3">
-        //         {searchResults
-        //           .filter((item) => item.media_type === "movie")
-        //           .map((item) => {
-        //             return <LongCard item={item} key={item.id}></LongCard>;
-        //           })}
-        //       </div>
-        //     </>
-        //   )}
-        //   {searchResults.filter((item) => item.media_type === "tv").length >
-        //     0 && (
-        //     <>
-        //       <h1 className=" capitalize font-bold text-4xl my-7">Tv Shows</h1>
-        //       <div className="flex flex-col gap-3">
-        //         {searchResults
-        //           .filter((item) => item.media_type === "tv")
-        //           .map((item) => {
-        //             return <LongCard item={item} key={item.id}></LongCard>;
-        //           })}
-        //       </div>
-        //     </>
-        //   )}
-        //   {searchResults.filter((item) => item.media_type === "person").length >
-        //     0 && (
-        //     <>
-        //       <h1 className=" capitalize font-bold text-4xl my-7">People</h1>
-        //       <div className="flex flex-col gap-3">
-        //         {searchResults
-        //           .filter((item) => item.media_type === "person")
-        //           .map((item) => {
-        //             return <LongCard item={item} key={item.id}></LongCard>;
-        //           })}
-        //       </div>
-        //     </>
-        //   )}
-        // </div>
       )}
       {selected === "movie" && (
         <div>

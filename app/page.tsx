@@ -15,10 +15,6 @@ import Link from "next/link";
 import Swiper from "./components/swiper/swiper";
 import { useDispatch } from "react-redux";
 import { setClientLocation, setlanguages } from "@/store/root-reducer";
-interface gens {
-  movie: genreInterface[];
-  tv: genreInterface[];
-}
 
 export default function Home() {
   const [allTrending, setAllTrending] = useState<detailsType[]>([]);

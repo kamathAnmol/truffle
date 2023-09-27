@@ -12,7 +12,6 @@ import Watchlist from "../components/watchlist/watchlist";
 import { Divider } from "@nextui-org/react";
 
 const WatchlistPage = () => {
-  // const [watchlist, setWatchlist] = useState<watchListInterface>();
   const watchlist = useSelector(watchListSelector);
 
   const uid = useSelector(selectCurrentUser);

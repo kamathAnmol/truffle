@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   selectCurrentUser,
   setWatchlist,
-  watchListInterface,
   watchListSelector,
 } from "@/store/root-reducer";
 import { Image } from "@nextui-org/react";

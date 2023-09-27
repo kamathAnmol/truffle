@@ -10,15 +10,13 @@ import {
   Input,
   Chip,
 } from "@nextui-org/react";
-import { MailIcon } from "@/public/assests/MailIcon";
-import { LockIcon } from "@/public/assests/LockIcon";
+import { Mail, Lock } from "lucide-react";
 import { User2 } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { setCurrentUser } from "@/store/root-reducer";
-import { data } from "autoprefixer";
 
 const RegisterBtn = () => {
-  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const dispatch = useDispatch();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -80,9 +78,8 @@ const RegisterBtn = () => {
                 />
 
                 <Input
-                  autoFocus
                   endContent={
-                    <MailIcon className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
+                    <Mail className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
                   }
                   label="Email"
                   placeholder="Enter your email"
@@ -92,7 +89,7 @@ const RegisterBtn = () => {
                 />
                 <Input
                   endContent={
-                    <LockIcon className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
+                    <Lock className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
                   }
                   label="Password"
                   placeholder="Enter your password"

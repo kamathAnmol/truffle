@@ -32,9 +32,9 @@ import { useSelector } from "react-redux";
 import HeartBtn from "@/app/components/heartBtn/heartBtn";
 import Display3 from "@/app/components/display/display3";
 import Display4 from "@/app/components/display/display4";
-import ImgGallary from "@/app/components/imgGallary/imgGallary";
 import VideoGallary from "@/app/components/videoGallary/videoGallary";
 import Display1 from "@/app/components/display/display1";
+import ImgGallary from "@/app/components/imgGallary/imgGallary";
 
 const DetailPage = ({ params }: { params: { query: string[] } }) => {
   const query = params.query;
@@ -72,7 +72,6 @@ const DetailPage = ({ params }: { params: { query: string[] } }) => {
         }
       const getSimilar = await fetchSimilar(query[0], query[1]);
       setSimilar(getSimilar);
-      console.log(similar);
     };
 
     fetchData();

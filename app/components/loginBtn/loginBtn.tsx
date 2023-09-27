@@ -10,13 +10,12 @@ import {
   Input,
   Chip,
 } from "@nextui-org/react";
-import { MailIcon } from "@/public/assests/MailIcon";
-import { LockIcon } from "@/public/assests/LockIcon";
+import { Mail, Lock } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { setCurrentUser } from "@/store/root-reducer";
 
 const LoginBtn = () => {
-  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | undefined | any>();
@@ -63,7 +62,7 @@ const LoginBtn = () => {
                 <Input
                   autoFocus
                   endContent={
-                    <MailIcon className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
+                    <Mail className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
                   }
                   label="Email"
                   placeholder="Enter your email"
@@ -73,7 +72,7 @@ const LoginBtn = () => {
                 />
                 <Input
                   endContent={
-                    <LockIcon className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
+                    <Lock className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
                   }
                   label="Password"
                   placeholder="Enter your password"

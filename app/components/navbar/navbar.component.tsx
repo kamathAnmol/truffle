@@ -84,24 +84,35 @@ export default function NavbarComponent() {
       </NavbarContent>
 
       <NavbarMenu>
-        {menuItems.map((item, index) => (
-          <NavbarMenuItem key={`${item}-${index}`}>
-            <Link
-              className="w-full"
-              color={
-                index === 2
-                  ? "warning"
-                  : index === menuItems.length - 1
-                  ? "danger"
-                  : "foreground"
-              }
-              href="#"
-              size="lg"
-            >
-              {item}
-            </Link>
+        <NavbarMenuItem key={"Home"}>
+          <Link href="/" size="lg" className="w-full">
+            Home
+          </Link>
+        </NavbarMenuItem>
+        <NavbarMenuItem key={"Movies"}>
+          <Link href="/movies" size="lg" className="w-full">
+            Movies
+          </Link>
+        </NavbarMenuItem>
+        <NavbarMenuItem key={"Shows"}>
+          <Link href="/shows" size="lg" className="w-full">
+            Shows
+          </Link>
+        </NavbarMenuItem>
+        {user ? (
+          <NavbarMenuItem>
+            <SignOutBtn />
           </NavbarMenuItem>
-        ))}
+        ) : (
+          <>
+            <NavbarMenuItem>
+              <LoginBtn />
+            </NavbarMenuItem>
+            <NavbarMenuItem>
+              <RegisterBtn />
+            </NavbarMenuItem>
+          </>
+        )}
       </NavbarMenu>
     </Navbar>
   );

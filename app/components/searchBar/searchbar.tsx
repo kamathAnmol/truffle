@@ -13,13 +13,13 @@ import {
   ModalContent,
   useDisclosure,
 } from "@nextui-org/react";
-import { search, MediaItem } from "@/app/api/fetchData";
+import { search, detailsType } from "@/app/api/fetchData";
 import Link from "next/link";
 import { useDebounce } from "use-debounce";
 
 const SearchBar = () => {
   const [searchValue, setSearchValue] = useState("");
-  const [seachResults, setSearchResults] = useState<MediaItem[]>([]);
+  const [seachResults, setSearchResults] = useState<detailsType[]>([]);
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const [debounceValue] = useDebounce(searchValue, 500);
 

@@ -1,7 +1,6 @@
 import { combineReducers, createSlice } from "@reduxjs/toolkit";
 import type { CreateSliceOptions } from "@reduxjs/toolkit";
 import { PayloadAction } from "@reduxjs/toolkit";
-import { User } from "firebase/auth";
 
 import { createSelector } from "reselect";
 
