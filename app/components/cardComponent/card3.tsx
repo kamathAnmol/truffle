@@ -1,6 +1,7 @@
 import React from "react";
 import { Person, img_base_uri } from "@/app/api/fetchData";
 import { Card, CardFooter, Image } from "@nextui-org/react";
+import Link from "next/link";
 
 type Props = {
   item: Person;
@@ -8,7 +9,7 @@ type Props = {
 
 const Card3 = ({ item }: Props) => {
   return (
-    <div>
+    <Link href={`/details/person/${item.id}`}>
       <Card isFooterBlurred radius="lg" className="border-none flex">
         <Image
           alt="profile"
@@ -30,7 +31,7 @@ const Card3 = ({ item }: Props) => {
           )}
         </CardFooter>
       </Card>
-    </div>
+    </Link>
   );
 };
 

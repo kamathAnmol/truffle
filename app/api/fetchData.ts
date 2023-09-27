@@ -29,6 +29,20 @@ export interface WatchProvidersInterface {
     };
   };
 }
+export interface reviewInterface {
+  id: string;
+  author: string;
+  author_details: {
+    name: string;
+    username: string;
+    avatar_path: string | null;
+    rating: number | null;
+  };
+  content: string;
+  created_at: string;
+  updated_at: string;
+  url: string;
+}
 
 export interface countryInterface {
   link: string | null;
@@ -74,6 +88,7 @@ export interface detailsType {
     posters: imgInterface[];
     loops: imgInterface[];
     logos: imgInterface[];
+    profiles: imgInterface[];
   };
   created_by?: any[];
   episode_run_time?: number[];
@@ -310,5 +325,16 @@ export const fetchSimilar = async (
   );
   const data = await response.json();
 
+  return data.results;
+};
+
+export const fetchReviews = async (
+  type: string,
+  id: string
+): Promise<reviewInterface[]> => {
+  const response = await fetch(
+    `${baseUri}${type}/${id}/reviews?api_key=${apiKey}`
+  );
+  const data = await response.json();
   return data.results;
 };

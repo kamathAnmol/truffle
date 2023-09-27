@@ -46,6 +46,12 @@ const Display1 = (props: props) => {
       240: {
         slidesPerView: 3,
       },
+      660: {
+        slidesPerView: 4,
+      },
+      770: {
+        slidesPerView: 3,
+      },
       1200: {
         slidesPerView: 4,
       },
