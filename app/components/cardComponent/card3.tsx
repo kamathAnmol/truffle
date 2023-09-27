@@ -13,7 +13,10 @@ const Card3 = ({ item }: Props) => {
       <Card isFooterBlurred radius="lg" className="border-none flex">
         <Image
           alt="profile"
-          className="object-cover  self-center min-h-max"
+          className="object-cover w-fit max-h-44 md:max-h-56 xl:max-h-80  mx-auto"
+          classNames={{
+            wrapper: "mx-auto mt-3",
+          }}
           src={
             item.profile_path !== null
               ? `${img_base_uri}${item.profile_path}`

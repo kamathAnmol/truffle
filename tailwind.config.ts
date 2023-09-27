@@ -21,6 +21,9 @@ const config: Config = {
       padding: {
         unset: "unset",
       },
+      backgroundSize: {
+        coverimp: "cover !important",
+      },
     },
   },
   plugins: [nextui()],

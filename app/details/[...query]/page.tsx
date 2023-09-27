@@ -87,7 +87,6 @@ const DetailPage = ({ params }: { params: { query: string[] } }) => {
   const trailer = details?.videos?.results?.filter(
     (item) => item.type === "Trailer" && item.site === "YouTube"
   )[0];
-  console.log(details);
   const imgList: string[] = [];
   if (details?.media_type === "person") {
     details.images.profiles.map((img) =>
@@ -117,26 +116,24 @@ const DetailPage = ({ params }: { params: { query: string[] } }) => {
     return (
       <div>
         <div
-          className="top-container w-full md:w-4/5 mx-auto "
+          className="top-container w-full md:w-4/5 mx-auto bg-coverimp"
           style={{
             background: details?.backdrop_path
-              ? `url(${img_base_uri}${details?.backdrop_path}) no-repeat`
+              ? `url(${img_base_uri}${details?.backdrop_path}) `
               : "#363636",
-            minHeight: "30vw",
-            backgroundSize: "cover",
           }}
         >
           <div
-            className="backdrop-wrapper flex flex-col md:flex-row content-start md:content-center w-full  bg-black/70 backdrop-blur-sm py-5 px-10  xl:px-20 xl:py-10 "
+            className="backdrop-wrapper flex flex-col md:flex-row content-start md:content-center w-full  bg-black/70 backdrop-blur-sm py-5 px-10  xl:px-20 xl:py-10 items-start"
             style={{ minHeight: "30vw" }}
           >
-            {uid !== null && (
+            {uid !== null && details?.media_type !== "person" && (
               <div className="absolute top-3 right-3 w-14">
                 <HeartBtn id={query[1]} type={query[0]} />
               </div>
             )}
 
-            <div className="img-wrapper w-1/3 flex content-center  self-start">
+            <div className="img-wrapper w-1/3 flex content-center  ">
               <Image
                 src={
                   details?.media_type === "movie" ||
@@ -152,7 +149,7 @@ const DetailPage = ({ params }: { params: { query: string[] } }) => {
                 className="rounded-md m-auto w-full max-h-60 md:max-h-80 xl:max-h-96"
               />
             </div>
-            <div className="content-wrapper w-3/4 my-14  md:my-auto h-4/5 flex flex-col gap-4 md:mx-10">
+            <div className="content-wrapper w-3/4  h-4/5 flex flex-col gap-4 ml-4 xl:ml-0">
               <h1 className=" font-bold text-lg xl:text-3xl">
                 {details?.name || details?.title} &nbsp;
                 {(details?.original_name || details?.original_title) && (
@@ -299,7 +296,7 @@ const DetailPage = ({ params }: { params: { query: string[] } }) => {
             )}
             {details?.media_type !== "person" && (
               <Tab key={1} title="Cast">
-                <div className=" bg-stone-900 rounded-md xl:p-8 md:p-4 p-0  my-8 ">
+                <div className=" bg-stone-900 rounded-md xl:p-8 md:p-4 p-3  my-8 ">
                   <h1 className="font-bold text-2xl">Cast</h1>
                   <Display3 list={cast} key={query[1]}></Display3>
                 </div>
@@ -307,7 +304,7 @@ const DetailPage = ({ params }: { params: { query: string[] } }) => {
             )}
             {details?.media_type !== "person" && (
               <Tab key={2} title="Crew">
-                <div className=" bg-stone-900 rounded-md xl:p-8 md:p-4 p-0  my-8 ">
+                <div className=" bg-stone-900 rounded-md xl:p-8 md:p-4 p-3  my-8 ">
                   <h1 className="font-bold text-2xl">Crew</h1>
                   <Display3 list={crew} key={query[1]}></Display3>
                 </div>
@@ -315,7 +312,7 @@ const DetailPage = ({ params }: { params: { query: string[] } }) => {
             )}
             {details?.media_type !== "person" && (
               <Tab title="Similar" key={3}>
-                <div className=" bg-stone-900 rounded-md xl:p-8 md:p-4 p-0  my-8 ">
+                <div className=" bg-stone-900 rounded-md xl:p-8 md:p-4 p-3  my-8 ">
                   <h1 className="font-bold text-2xl">Similar</h1>
                   <Display1 list={similar!} key={query[1]}></Display1>
                 </div>
@@ -323,7 +320,7 @@ const DetailPage = ({ params }: { params: { query: string[] } }) => {
             )}
             {details?.media_type === "tv" && (
               <Tab title="Seasons" key={4}>
-                <div className=" bg-stone-900 rounded-md md:p-4 p-0 xl:p-8 my-8 ">
+                <div className=" bg-stone-900 rounded-md md:p-4 p-3 xl:p-8 my-8 ">
                   <h1 className="font-bold text-2xl">Seasons</h1>
                   <Display4
                     seasons={details.seasons}
@@ -333,7 +330,7 @@ const DetailPage = ({ params }: { params: { query: string[] } }) => {
               </Tab>
             )}
             <Tab title={`Images(${imgList.length})`} key={5}>
-              <div className=" bg-stone-900 rounded-md md:p-4 p-0 xl:p-8 my-8 ">
+              <div className=" bg-stone-900 rounded-md md:p-4 p-3 xl:p-8 my-8 ">
                 <h1 className="font-bold text-2xl">Images</h1>
 
                 <ImgGallary imgs={imgList}></ImgGallary>
@@ -344,7 +341,7 @@ const DetailPage = ({ params }: { params: { query: string[] } }) => {
                 title={`Videos(${details?.videos?.results?.length})`}
                 key={6}
               >
-                <div className=" bg-stone-900 rounded-md md:p-4 p-0 xl:p-8 my-8 ">
+                <div className=" bg-stone-900 rounded-md md:p-4 p-3 xl:p-8 my-8 ">
                   <h1 className="font-bold text-2xl">Videos</h1>
                   <VideoGallary
                     videos={details?.videos?.results}
