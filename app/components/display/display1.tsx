@@ -22,7 +22,7 @@ const Display1 = (props: props) => {
   const [prevState, setPrevState] = useState<HTMLButtonElement | undefined>();
   useEffect(() => {
     if (prevRef.current) setPrevState(prevRef.current);
-  }, [prevRef.current]);
+  }, []);
 
   const { list } = props;
   const swiperProps: lazyProps = {
@@ -46,10 +46,10 @@ const Display1 = (props: props) => {
       240: {
         slidesPerView: 3,
       },
-      768: {
+      1200: {
         slidesPerView: 4,
       },
-      1600: {
+      1650: {
         slidesPerView: 5,
       },
     },
@@ -57,7 +57,7 @@ const Display1 = (props: props) => {
 
   return (
     <div className="relative w-full">
-      <div className=" px-3 md:p-8 w-full mx-auto relative flex items-center">
+      <div className=" px-3 md:p-4 xl:p-8 w-full mx-auto relative flex items-center">
         <Button
           ref={prevRef}
           className=" hidden md:flex"

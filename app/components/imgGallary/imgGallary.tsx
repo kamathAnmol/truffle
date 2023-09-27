@@ -80,7 +80,7 @@ const ImgGallary = ({ imgs }: Props) => {
                       }}
                     >
                       {imgs.map((img) => (
-                        <SwiperSlide>
+                        <SwiperSlide key={img}>
                           <Image
                             src={img}
                             alt="image"

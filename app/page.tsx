@@ -54,6 +54,7 @@ export default function Home() {
             classNames={{
               wrapper: "absolute w-full h-full top-20 left-0 ",
             }}
+            alt=""
           ></Image>
           <h1 className="font-bold text-xl ml-8 z-10">
             New Releases <small>(movies)</small>
@@ -67,6 +68,7 @@ export default function Home() {
             classNames={{
               wrapper: "absolute w-full h-full top-20 left-0",
             }}
+            alt=""
           ></Image>
           <h1 className="font-bold text-xl ml-8 ">
             New Releases <small>(Shows)</small>

@@ -108,10 +108,11 @@ const DetailPage = ({ params }: { params: { query: string[] } }) => {
               ? `url(${img_base_uri}${details?.backdrop_path}) no-repeat`
               : "#363636",
             minHeight: "30vw",
+            backgroundSize: "cover",
           }}
         >
           <div
-            className="backdrop-wrapper flex flex-col md:flex-row content-start md:content-center w-full  bg-black/70 backdrop-blur-sm p-20"
+            className="backdrop-wrapper flex flex-col md:flex-row content-start md:content-center w-full  bg-black/70 backdrop-blur-sm py-5 px-10  xl:px-20 xl:py-10 "
             style={{ minHeight: "30vw" }}
           >
             {uid !== null && (
@@ -124,10 +125,10 @@ const DetailPage = ({ params }: { params: { query: string[] } }) => {
               <Image
                 src={imgPath!}
                 alt=""
-                className="w-2/3 rounded-md m-auto "
+                className="rounded-md m-auto w-full max-h-60 md:max-h-80 xl:max-h-96"
               />
             </div>
-            <div className="content-wrapper w-3/4 my-14  md:my-auto h-4/5 flex flex-col gap-4 mx-10">
+            <div className="content-wrapper w-3/4 my-14  md:my-auto h-4/5 flex flex-col gap-4 md:mx-10">
               <h1 className=" font-bold text-lg xl:text-3xl">
                 {details?.name || details?.title} &nbsp;
                 {(details?.original_name || details?.original_title) && (
@@ -237,12 +238,20 @@ const DetailPage = ({ params }: { params: { query: string[] } }) => {
                   </Modal>
                 </>
               )}
-              {details?.overview && <p>{details.overview}</p>}
+              {details?.overview && (
+                <p className="hidden xl:block">{details.overview}</p>
+              )}
             </div>
           </div>
         </div>
-        <div className="w-4/5 mx-auto my-8">
-          <Tabs size="lg" disableAnimation>
+        <div className="w-[98%] md:w-4/5 mx-auto my-8 ">
+          <Tabs size="sm">
+            <Tab key="Overview" title="Overview" className="block xl:hidden">
+              <div className=" bg-stone-900 rounded-md p-8  my-8">
+                <h1 className="font-bold text-2xl">Overview</h1>
+                <p>{details?.overview}</p>
+              </div>
+            </Tab>
             <Tab key="Cast" title="Cast">
               <div className=" bg-stone-900 rounded-md p-8  my-8">
                 <h1 className="font-bold text-2xl">Cast</h1>

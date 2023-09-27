@@ -26,7 +26,7 @@ const Card1 = (props: props) => {
             alt="poster"
             src={imgPath}
             shadow="sm"
-            className="object-cover w-full h-44 md:h-56 xl:h-80"
+            className="object-cover w-full max-h-44 md:max-h-56 xl:max-h-80"
           ></Image>
         </CardHeader>
         <CardBody className=" overflow-y-hidden p-[unset] px-2 pb-2 md:p-5">

@@ -38,6 +38,17 @@ const Display3 = (props: props) => {
       clickable: true,
       dynamicBullets: true,
     },
+    breakpoints: {
+      240: {
+        slidesPerView: 3,
+      },
+      1200: {
+        slidesPerView: 4,
+      },
+      1650: {
+        slidesPerView: 5,
+      },
+    },
   };
   useEffect(() => {
     if (prevRef.current) setPrevState(prevRef.current);
@@ -45,7 +56,7 @@ const Display3 = (props: props) => {
 
   return (
     <div>
-      <div className="p-8 relative flex items-center gap-3">
+      <div className="xl:p-8 md:p-4 px-0 py-4 relative flex items-center gap-3">
         <Button
           ref={prevRef}
           className=" hidden md:flex"

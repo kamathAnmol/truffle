@@ -20,6 +20,10 @@ const SwiperComponent = ({ list }: props) => {
   const prevRef = useRef<HTMLButtonElement | null>(null);
   const nextRef = useRef<HTMLButtonElement | null>(null);
   const paginatonRef = useRef<HTMLDivElement | null>(null);
+  const [prevState, setPrevState] = useState<HTMLButtonElement | undefined>();
+  useEffect(() => {
+    if (prevRef.current) setPrevState(prevRef.current);
+  }, []);
 
   return (
     <div className="relative">
@@ -51,7 +55,7 @@ const SwiperComponent = ({ list }: props) => {
         }}
         centeredSlides={true}
         navigation={{
-          prevEl: prevRef.current,
+          prevEl: prevState,
           nextEl: nextRef.current,
         }}
         loop={true}
@@ -76,7 +80,7 @@ const SwiperComponent = ({ list }: props) => {
                   <div className=" w-1/4">
                     <Image
                       src={`${img_base_uri}${item.poster_path}`}
-                      className="w-full h-24 md:h-80 xl:h-96"
+                      className="w-full max-h-24 md:max-h-80 xl:max-h-96"
                       alt="poster"
                     />
                   </div>
@@ -93,7 +97,7 @@ const SwiperComponent = ({ list }: props) => {
                         size="sm"
                       />
                     </div>
-                    <p className="text-clip hidden md:block">{item.overview}</p>
+                    <p className="text-clip hidden xl:block">{item.overview}</p>
                   </div>
                 </div>
               </Link>
