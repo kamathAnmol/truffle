@@ -20,7 +20,6 @@ Have you been in a situation where you wanted to watch movie but dont know what 
 
 ## Usage
 
-To deploy this project run
 
 ```bash
   git clone https://github.com/kamathAnmol/truffle
