@@ -10,7 +10,6 @@ import {
 import React, { useEffect, useState } from "react";
 import { Button, Image, Spinner } from "@nextui-org/react";
 import Display1 from "./components/display/display1";
-import { genreInterface } from "@/app/api/fetchData";
 import Link from "next/link";
 import Swiper from "./components/swiper/swiper";
 import { useDispatch } from "react-redux";
