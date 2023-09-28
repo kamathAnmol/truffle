@@ -1,6 +1,6 @@
 # Truffle
 
-Have been in a situation where you wanted to watch movie but dont know what to watch .Such situations can be handled easily with **Truffle** which is a open-source web application which was built using [**TMDB api**](https://developer.themoviedb.org/).
+Have you been in a situation where you wanted to watch movie but dont know what to watch .Such situations can be handled easily with **Truffle** which is a open-source web application which was built using [**TMDB api**](https://developer.themoviedb.org/).
 
 ## Tech used
 
@@ -12,8 +12,6 @@ Have been in a situation where you wanted to watch movie but dont know what to w
 
 ## Screenshots
 
-Insert gif or link to demo
-
 ![Home](http://0x0.st/HVJk.png)
 
 ##
@@ -22,7 +20,6 @@ Insert gif or link to demo
 
 ## Usage
 
-To deploy this project run
 
 ```bash
   git clone https://github.com/kamathAnmol/truffle
