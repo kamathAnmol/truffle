@@ -149,20 +149,77 @@ export const languagesSelector = createSelector(
 
 //loactionInterface
 
+export interface locatioData {
+  asn: string;
+  city: string;
+  continent_code: string;
+  country: string;
+  country_area: number;
+  country_calling_code: string;
+  country_capital: string;
+  country_code: string;
+  country_code_iso3: string;
+  country_name: string;
+  country_population: number;
+  country_tld: string;
+  currency: string;
+  currency_name: string;
+  in_eu: boolean;
+  ip: string;
+  languages: string;
+  latitude: number;
+  longitude: number;
+  network: string;
+  org: string;
+  postal: string;
+  region: string;
+  region_code: string;
+  timezone: string;
+  utc_offset: string;
+  version: string;
+}
 export interface clInterface {
-  countryCode: string;
+  locationData: locatioData;
 }
 
 const initialLoaction: clInterface = {
-  countryCode: "",
+  locationData: {
+    asn: "",
+    city: "",
+    continent_code: "",
+    country: "",
+    country_area: 0,
+    country_calling_code: "",
+    country_capital: "",
+    country_code: "",
+    country_code_iso3: "",
+    country_name: "",
+    country_population: 0,
+    country_tld: "",
+    currency: "",
+    currency_name: "",
+    in_eu: false,
+    ip: "",
+    languages: "",
+    latitude: 0,
+    longitude: 0,
+    network: "",
+    org: "",
+    postal: "",
+    region: "",
+    region_code: "",
+    timezone: "",
+    utc_offset: "",
+    version: "",
+  },
 };
 
 const loactionSlice = createSlice({
   name: "location",
   initialState: initialLoaction,
   reducers: {
-    setClientLocation(state, action: PayloadAction<string>) {
-      state.countryCode = action.payload;
+    setClientLocation(state, action: PayloadAction<clInterface>) {
+      state.locationData = action.payload;
     },
   },
 });
@@ -174,7 +231,7 @@ const loactionState = (state: rootInterface) => {
 
 export const loactionSelector = createSelector(
   [loactionState],
-  (location) => location.countryCode
+  (location) => location.locationData
 );
 //root reducer
 

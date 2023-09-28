@@ -38,6 +38,8 @@ import VideoGallary from "@/app/components/videoGallary/videoGallary";
 import Display1 from "@/app/components/display/display1";
 import ImgGallary from "@/app/components/imgGallary/imgGallary";
 import ReviesDisplay from "@/app/components/display/reviewsDisplay";
+import Link from "next/link";
+import { Popcorn } from "lucide-react";
 
 const DetailPage = ({ params }: { params: { query: string[] } }) => {
   const query = params.query;
@@ -49,10 +51,9 @@ const DetailPage = ({ params }: { params: { query: string[] } }) => {
   const [providers, setProviders] = useState<WatchProvider[]>();
   const [similar, setSimilar] = useState<detailsType[]>();
   const [reviews, setReviews] = useState<reviewInterface[]>();
-  const countryCode = useSelector(loactionSelector);
+  const location = useSelector(loactionSelector);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const uid = useSelector(selectCurrentUser);
-
   useEffect(() => {
     const fetchData = async () => {
       const data: detailsType = await fetchDetails(query[0], query[1]);
@@ -65,8 +66,8 @@ const DetailPage = ({ params }: { params: { query: string[] } }) => {
         +query[1]
       );
       if (watchData.results !== undefined)
-        if (watchData.results[countryCode] !== undefined) {
-          const countrydata = watchData.results[countryCode];
+        if (watchData.results[location.country_code] !== undefined) {
+          const countrydata = watchData.results[location.country_code];
           const tempProvider = new Set<WatchProvider>();
           countrydata.ads?.map((item) => tempProvider.add(item));
           countrydata.buy?.map((item) => tempProvider.add(item));
@@ -83,7 +84,7 @@ const DetailPage = ({ params }: { params: { query: string[] } }) => {
 
     fetchData();
     setLoading(false);
-  }, [query, countryCode]);
+  }, [query, location.country_code]);
   const trailer = details?.videos?.results?.filter(
     (item) => item.type === "Trailer" && item.site === "YouTube"
   )[0];
@@ -229,44 +230,53 @@ const DetailPage = ({ params }: { params: { query: string[] } }) => {
                   </div>
                 </div>
               )}
-              {trailer !== null && trailer !== undefined && (
-                <>
-                  <Tooltip content="watch Trailer">
-                    <Button
-                      variant="bordered"
-                      color="danger"
-                      onPress={onOpen}
-                      className="w-fit"
+              <div className="flex gap-3">
+                {trailer !== null && trailer !== undefined && (
+                  <>
+                    <Tooltip content="watch Trailer">
+                      <Button
+                        variant="bordered"
+                        color="danger"
+                        onPress={onOpen}
+                        className="w-fit"
+                      >
+                        Trailer
+                      </Button>
+                    </Tooltip>
+                    <Modal
+                      isOpen={isOpen}
+                      onOpenChange={onOpenChange}
+                      size="5xl"
+                      backdrop="blur"
                     >
-                      Trailer
+                      <ModalContent>
+                        {(onClose) => (
+                          <>
+                            <ModalHeader className="flex flex-col gap-1">
+                              Trailer
+                            </ModalHeader>
+                            <ModalBody>
+                              <iframe
+                                height={600}
+                                src={`https://www.youtube.com/embed/${trailer?.key}`}
+                                className=" rounded-md p-8"
+                                allowFullScreen
+                              ></iframe>
+                            </ModalBody>
+                          </>
+                        )}
+                      </ModalContent>
+                    </Modal>
+                  </>
+                )}
+                {details?.media_type === "movie" && (
+                  <Link href={`/book/${details.id}`}>
+                    <Button variant="flat" color="warning">
+                      Book bow <Popcorn />
                     </Button>
-                  </Tooltip>
-                  <Modal
-                    isOpen={isOpen}
-                    onOpenChange={onOpenChange}
-                    size="5xl"
-                    backdrop="blur"
-                  >
-                    <ModalContent>
-                      {(onClose) => (
-                        <>
-                          <ModalHeader className="flex flex-col gap-1">
-                            Trailer
-                          </ModalHeader>
-                          <ModalBody>
-                            <iframe
-                              height={600}
-                              src={`https://www.youtube.com/embed/${trailer?.key}`}
-                              className=" rounded-md p-8"
-                              allowFullScreen
-                            ></iframe>
-                          </ModalBody>
-                        </>
-                      )}
-                    </ModalContent>
-                  </Modal>
-                </>
-              )}
+                  </Link>
+                )}
+              </div>
               {details?.overview && (
                 <p className="hidden xl:block">{details.overview}</p>
               )}
