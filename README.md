@@ -1,6 +1,6 @@
 # Truffle
 
-Have been in a situation where you wanted to watch movie but dont know what to watch .Such situations can be handled easily with **Truffle** which is a open-source web application which was built using [**TMDB api**](https://developer.themoviedb.org/).
+Have you been in a situation where you wanted to watch movie but dont know what to watch .Such situations can be handled easily with **Truffle** which is a open-source web application which was built using [**TMDB api**](https://developer.themoviedb.org/).
 
 ## Tech used
 
