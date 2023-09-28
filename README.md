@@ -12,8 +12,6 @@ Have you been in a situation where you wanted to watch movie but dont know what 
 
 ## Screenshots
 
-Insert gif or link to demo
-
 ![Home](http://0x0.st/HVJk.png)
 
 ##
