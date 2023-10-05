@@ -30,7 +30,7 @@ export default function NavbarComponent() {
       dispatch(setClientLocation(result));
     };
     getLoc();
-  }, []);
+  }, [dispatch]);
   return (
     <Navbar disableAnimation isBordered>
       <NavbarContent className="sm:hidden" justify="start">

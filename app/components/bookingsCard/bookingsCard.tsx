@@ -32,7 +32,7 @@ const BookingsCard = ({ item }: Props) => {
       } else console.log(response);
     };
     getBookingDeatils();
-  }, []);
+  }, [item.movie_id, item.theatre_id]);
   return (
     <Card
       isBlurred
@@ -61,7 +61,7 @@ const BookingsCard = ({ item }: Props) => {
               </h3>
               <div className="flex gap-2">
                 {movieDetails?.genres?.map((genre) => (
-                  <Chip size="sm" color="warning">
+                  <Chip size="sm" color="warning" key={genre.id}>
                     {genre.name}
                   </Chip>
                 ))}

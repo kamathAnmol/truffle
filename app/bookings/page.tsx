@@ -63,7 +63,7 @@ const BookingPage = (props: Props) => {
       }
     };
     getBookings();
-  }, []);
+  }, [uid]);
   // console.log(old, upComing);
   return (
     <div className="w-full md:w-4/5 mx-auto my-4 relative">
@@ -71,14 +71,14 @@ const BookingPage = (props: Props) => {
         <Tab key="upcoming" title={`Upcoming Bookings(${upComing?.length})`}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {upComing?.map((item) => (
-              <BookingsCard item={item}></BookingsCard>
+              <BookingsCard item={item} key={item.seats}></BookingsCard>
             ))}
           </div>
         </Tab>
         <Tab key="old" title={`Old Bookings(${old?.length})`}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {old?.map((item) => (
-              <BookingsCard item={item}></BookingsCard>
+              <BookingsCard item={item} key={item.seats}></BookingsCard>
             ))}
           </div>
         </Tab>

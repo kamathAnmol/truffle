@@ -52,7 +52,7 @@ const Display3 = (props: props) => {
   };
   useEffect(() => {
     if (prevRef.current) setPrevState(prevRef.current);
-  }, [prevRef.current]);
+  }, []);
 
   return (
     <div>
