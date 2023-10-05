@@ -14,13 +14,23 @@ import "./navbar.styles.scss";
 
 import LoginBtn from "../loginBtn/loginBtn";
 import RegisterBtn from "../registerBtn/registerBtn";
-import { useSelector } from "react-redux";
-import { selectCurrentUser } from "@/store/root-reducer";
+import { useDispatch, useSelector } from "react-redux";
+import { selectCurrentUser, setClientLocation } from "@/store/root-reducer";
 import SignOutBtn from "../signOutBtn/signOutBtn";
 import SearchBar from "../searchBar/searchbar";
+import { useEffect } from "react";
 export default function NavbarComponent() {
   const menuItems = ["Profile", "Home", "Movies", "Shows", "Log Out"];
   const user = useSelector(selectCurrentUser);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const getLoc = async () => {
+      const userLocation = await fetch("https://ipapi.co/json/");
+      const result = await userLocation.json();
+      dispatch(setClientLocation(result));
+    };
+    getLoc();
+  }, []);
   return (
     <Navbar disableAnimation isBordered>
       <NavbarContent className="sm:hidden" justify="start">
@@ -59,6 +69,11 @@ export default function NavbarComponent() {
         <NavbarItem>
           <Link color="foreground" href="/watchlist">
             Watchlist
+          </Link>
+        </NavbarItem>
+        <NavbarItem>
+          <Link color="foreground" href="/bookings">
+            Bookings
           </Link>
         </NavbarItem>
       </NavbarContent>

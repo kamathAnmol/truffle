@@ -11,10 +11,7 @@ import { useEffect, useRef, useState } from "react";
 interface props {
   list: detailsType[];
 }
-interface lazyProps extends SwiperProps {
-  preloadImages: boolean;
-  lazy: boolean;
-}
+
 const Display1 = (props: props) => {
   const prevRef = useRef(null);
   const nextRef = useRef(null);
@@ -25,7 +22,7 @@ const Display1 = (props: props) => {
   }, []);
 
   const { list } = props;
-  const swiperProps: lazyProps = {
+  const swiperProps: SwiperProps = {
     modules: [Navigation, Autoplay, Virtual, Pagination],
     spaceBetween: 10,
 
@@ -35,8 +32,6 @@ const Display1 = (props: props) => {
       prevEl: prevState,
     },
     virtual: true,
-    preloadImages: false,
-    lazy: true,
     pagination: {
       clickable: true,
       el: paginatonRef.current,

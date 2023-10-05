@@ -26,6 +26,7 @@ const Card1 = (props: props) => {
             alt="poster"
             src={imgPath}
             shadow="sm"
+            loading="lazy"
             className="object-cover w-full max-h-44 md:max-h-56 xl:max-h-80"
           ></Image>
         </CardHeader>

@@ -149,7 +149,7 @@ export const languagesSelector = createSelector(
 
 //loactionInterface
 
-export interface locatioData {
+export interface clInterface {
   asn: string;
   city: string;
   continent_code: string;
@@ -178,40 +178,35 @@ export interface locatioData {
   utc_offset: string;
   version: string;
 }
-export interface clInterface {
-  locationData: locatioData;
-}
 
 const initialLoaction: clInterface = {
-  locationData: {
-    asn: "",
-    city: "",
-    continent_code: "",
-    country: "",
-    country_area: 0,
-    country_calling_code: "",
-    country_capital: "",
-    country_code: "",
-    country_code_iso3: "",
-    country_name: "",
-    country_population: 0,
-    country_tld: "",
-    currency: "",
-    currency_name: "",
-    in_eu: false,
-    ip: "",
-    languages: "",
-    latitude: 0,
-    longitude: 0,
-    network: "",
-    org: "",
-    postal: "",
-    region: "",
-    region_code: "",
-    timezone: "",
-    utc_offset: "",
-    version: "",
-  },
+  asn: "",
+  city: "",
+  continent_code: "",
+  country: "",
+  country_area: 0,
+  country_calling_code: "",
+  country_capital: "",
+  country_code: "",
+  country_code_iso3: "",
+  country_name: "",
+  country_population: 0,
+  country_tld: "",
+  currency: "",
+  currency_name: "",
+  in_eu: false,
+  ip: "",
+  languages: "",
+  latitude: 0,
+  longitude: 0,
+  network: "",
+  org: "",
+  postal: "",
+  region: "",
+  region_code: "",
+  timezone: "",
+  utc_offset: "",
+  version: "",
 };
 
 const loactionSlice = createSlice({
@@ -219,7 +214,7 @@ const loactionSlice = createSlice({
   initialState: initialLoaction,
   reducers: {
     setClientLocation(state, action: PayloadAction<clInterface>) {
-      state.locationData = action.payload;
+      state = { ...action.payload };
     },
   },
 });
@@ -231,7 +226,7 @@ const loactionState = (state: rootInterface) => {
 
 export const loactionSelector = createSelector(
   [loactionState],
-  (location) => location.locationData
+  (location) => location
 );
 //root reducer
 

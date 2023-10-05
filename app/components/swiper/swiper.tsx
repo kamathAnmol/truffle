@@ -41,7 +41,7 @@ const SwiperComponent = ({ list }: props) => {
         spaceBetween={50}
         slidesPerView={1.7}
         autoplay={{
-          delay: 2500,
+          delay: 5000,
           disableOnInteraction: false,
         }}
         breakpoints={{

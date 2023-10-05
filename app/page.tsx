@@ -15,36 +15,6 @@ import Swiper from "./components/swiper/swiper";
 import { useDispatch } from "react-redux";
 import { setClientLocation, setlanguages } from "@/store/root-reducer";
 
-interface LocationInfo {
-  asn: string;
-  city: string;
-  continent_code: string;
-  country: string;
-  country_area: number;
-  country_calling_code: string;
-  country_capital: string;
-  country_code: string;
-  country_code_iso3: string;
-  country_name: string;
-  country_population: number;
-  country_tld: string;
-  currency: string;
-  currency_name: string;
-  in_eu: boolean;
-  ip: string;
-  languages: string;
-  latitude: number;
-  longitude: number;
-  network: string;
-  org: string;
-  postal: string;
-  region: string;
-  region_code: string;
-  timezone: string;
-  utc_offset: string;
-  version: string;
-}
-
 export default function Home() {
   const [allTrending, setAllTrending] = useState<detailsType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
