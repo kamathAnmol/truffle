@@ -10,13 +10,15 @@ import {
   Input,
   Chip,
 } from "@nextui-org/react";
-import { Mail, Lock } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 import { User2 } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { setCurrentUser } from "@/store/root-reducer";
 
 const RegisterBtn = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [isVisible, setIsVisible] = useState<boolean>(false);
+
   const dispatch = useDispatch();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -89,11 +91,15 @@ const RegisterBtn = () => {
                 />
                 <Input
                   endContent={
-                    <Lock className="text-2xl text-default-400 pointer-events-none flex-shrink-0" />
+                    isVisible ? (
+                      <Eye color="grey" onClick={() => setIsVisible(false)} />
+                    ) : (
+                      <EyeOff color="grey" onClick={() => setIsVisible(true)} />
+                    )
                   }
                   label="Password"
                   placeholder="Enter your password"
-                  type="password"
+                  type={isVisible ? "text" : "password"}
                   variant="bordered"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -104,16 +110,6 @@ const RegisterBtn = () => {
                       {error}
                     </Chip>
                   )}
-                  {/* <Checkbox
-                    classNames={{
-                      label: "text-small",
-                    }}
-                  >
-                    Remember me
-                  </Checkbox>
-                  <Link color="primary" href="#" size="sm">
-                    Forgot password?
-                  </Link> */}
                 </div>
               </ModalBody>
               <ModalFooter>

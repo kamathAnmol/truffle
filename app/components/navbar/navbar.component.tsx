@@ -71,11 +71,13 @@ export default function NavbarComponent() {
             Watchlist
           </Link>
         </NavbarItem>
-        <NavbarItem>
-          <Link color="foreground" href="/bookings">
-            Bookings
-          </Link>
-        </NavbarItem>
+        {user && (
+          <NavbarItem>
+            <Link color="foreground" href="/bookings">
+              Bookings
+            </Link>
+          </NavbarItem>
+        )}
       </NavbarContent>
 
       <NavbarContent justify="end">
