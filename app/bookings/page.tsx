@@ -69,18 +69,30 @@ const BookingPage = (props: Props) => {
     <div className="w-full md:w-4/5 mx-auto my-4 relative">
       <Tabs aria-label="Bookings">
         <Tab key="upcoming" title={`Upcoming Bookings(${upComing?.length})`}>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {upComing?.map((item) => (
-              <BookingsCard item={item} key={item.seats}></BookingsCard>
-            ))}
-          </div>
+          {upComing?.length! > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {upComing?.map((item) => (
+                <BookingsCard item={item} key={item.seats}></BookingsCard>
+              ))}
+            </div>
+          ) : (
+            <h1 className="text-center font-extrabold text-4xl">
+              No Upcomings Bookings
+            </h1>
+          )}
         </Tab>
         <Tab key="old" title={`Old Bookings(${old?.length})`}>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {old?.map((item) => (
-              <BookingsCard item={item} key={item.seats}></BookingsCard>
-            ))}
-          </div>
+          {old?.length! > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {old?.map((item) => (
+                <BookingsCard item={item} key={item.seats}></BookingsCard>
+              ))}
+            </div>
+          ) : (
+            <h1 className="text-center font-extrabold text-4xl">
+              No Old Bookings
+            </h1>
+          )}
         </Tab>
       </Tabs>
     </div>

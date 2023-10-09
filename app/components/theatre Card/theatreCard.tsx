@@ -1,4 +1,5 @@
 import { theatreInterface } from "@/app/book/[id]/page";
+
 import {
   Modal,
   ModalContent,
@@ -16,6 +17,8 @@ import { Minus, Plus, X } from "lucide-react";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "@/store/root-reducer";
 import { bookingInterface } from "@/app/api/updateBookings/route";
+import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
+import { PaymentIntent } from "@stripe/stripe-js";
 
 type Props = {
   item: theatreInterface;
@@ -23,8 +26,9 @@ type Props = {
 };
 
 const TheatreCard = ({ item, date }: Props) => {
-  console.log(item);
-  const uid = useSelector(selectCurrentUser);
+  // eslint-disable-next-line no-console
+  const uid = useSelector(selectCurrentUser)!._id;
+
   const { onClose, onOpen, onOpenChange, isOpen } = useDisclosure();
   const [seats, setSeats] = useState<number>(0);
   const [selectedTime, setSelectedTime] = useState<number>();
@@ -32,6 +36,7 @@ const TheatreCard = ({ item, date }: Props) => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [statusModal, setStatusModal] = useState<string>("");
   const getPercentage = (x: number) => (x / item.total_seats) * 100;
+  const [paymentMOdal, setPaymentModal] = useState<boolean>(false);
   const checkTime = (time: string, date: string) => {
     const [day, month, year] = date?.split("/").map(Number);
     const [givenHour, givenMinute] = time?.split(":").map(Number);
@@ -40,12 +45,16 @@ const TheatreCard = ({ item, date }: Props) => {
     const currentTime = new Date();
     return givenTime < currentTime;
   };
-  const handleSubmit = async () => {
+  const stripe = useStripe();
+  const elements = useElements();
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     if (uid === null) {
       setStatusModal("Please login to Book");
       setShowSuccessModal(true);
       return;
     }
+    if (!stripe || !elements) return;
     const reqBody: bookingInterface = {
       uid,
       movie_id: item.movies[0].movie,
@@ -56,23 +65,52 @@ const TheatreCard = ({ item, date }: Props) => {
         show_time: item.movies[0].time[selectedTime!].time,
       },
     };
-    try {
-      const bookingsResponse = await fetch("/api/updateBookings", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(reqBody),
-      });
 
-      if (bookingsResponse.ok) {
-        console.log("Updated Db");
-        setStatusModal("Booked Succesfull 🎉");
+    try {
+      const response = await fetch("/api/create-payment-intent", {
+        method: "post",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          amount: seats * 180,
+        }),
+      });
+      const data: PaymentIntent = await response.json();
+      const { client_secret } = data;
+      const paymentResult = await stripe.confirmCardPayment(client_secret!, {
+        payment_method: {
+          card: elements.getElement(CardElement)!,
+          billing_details: {
+            name: uid.toString() ?? "guest",
+          },
+        },
+      });
+      if (paymentResult.error) {
+        console.error(paymentResult.error);
+        setStatusModal("Error durring Payment");
+        setPaymentModal(false);
         setShowSuccessModal(true);
-        onClose();
       } else {
-        setError(error);
-        console.log("error while updating db", bookingsResponse);
+        if (paymentResult.paymentIntent.status === "succeeded") {
+          const bookingsResponse = await fetch("/api/updateBookings", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(reqBody),
+          });
+          if (bookingsResponse.ok) {
+            console.log("Updated Db");
+            setStatusModal("Booked Successfully 🎉");
+            setPaymentModal(false);
+            setShowSuccessModal(true);
+            onClose();
+          } else {
+            setError(error);
+            console.log("error while updating db", bookingsResponse);
+          }
+        }
       }
     } catch (error) {
       console.log(error);
@@ -165,10 +203,45 @@ const TheatreCard = ({ item, date }: Props) => {
                 <Button color="danger" variant="light" onPress={onClose}>
                   Close
                 </Button>
-                <Button color="primary" onPress={handleSubmit}>
+                <Button color="primary" onPress={() => setPaymentModal(true)}>
                   Book
                 </Button>
               </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+      <Modal
+        isOpen={paymentMOdal}
+        onOpenChange={() => setPaymentModal(false)}
+        size="lg"
+        backdrop="blur"
+      >
+        <ModalContent>
+          {(onClosePayment) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">
+                Add card Details :
+              </ModalHeader>
+              <form onSubmit={handleSubmit}>
+                <ModalBody>
+                  <div className=" bg-gray-300 py-4 px-2 rounded-md">
+                    <CardElement />
+                  </div>
+                </ModalBody>
+                <ModalFooter>
+                  <Button
+                    color="primary"
+                    onPress={() => setPaymentModal(false)}
+                    type="button"
+                  >
+                    Close
+                  </Button>
+                  <Button color="primary" type="submit">
+                    Book
+                  </Button>
+                </ModalFooter>
+              </form>
             </>
           )}
         </ModalContent>

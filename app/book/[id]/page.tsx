@@ -58,6 +58,7 @@ const BookPage = ({ params }: { params: { id: string } }) => {
   const [cities, setcities] = useState<citiesInterface[] | null>([]);
   const [theatres, setTheatres] = useState<theatreInterface[]>([]);
   const [details, setDetails] = useState<detailsType>();
+  const [img, setImg] = useState<string>("");
   const id = params.id;
 
   type dateValueInterface = Date | null;
@@ -155,7 +156,10 @@ const BookPage = ({ params }: { params: { id: string } }) => {
     getCities();
     getDetails();
   }, [id]);
-
+  useEffect(() => {
+    setImg(details?.poster_path!);
+    console.log(details?.poster_path);
+  }, [details?.poster_path]);
   return (
     <div>
       <div className="w-full p-4 flex justify-center gap-4 items-center fixed top-16 bg-black/60 backdrop-blur-lg border-y-gray z-50">
@@ -207,7 +211,7 @@ const BookPage = ({ params }: { params: { id: string } }) => {
         <div className=" fixed left-0  md:ml-8 mx-2 rounded-md top-[200%]  flex-col items-center hidden md:flex">
           <div className="w-fit m-4 md:m-8 flex flex-col">
             <Image
-              src={`${img_base_uri}${details?.poster_path!}`}
+              src={`${img_base_uri}${img}`}
               alt=""
               className="rounded-md w-fit max-h-60 md:max-h-80 xl:max-h-96 m-0"
             ></Image>
