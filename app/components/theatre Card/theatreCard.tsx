@@ -232,7 +232,9 @@ const TheatreCard = ({ item, date }: Props) => {
                 <ModalFooter>
                   <Button
                     color="primary"
-                    onPress={() => setPaymentModal(false)}
+                    onPress={() => {
+                      setPaymentModal(false);
+                    }}
                     type="button"
                   >
                     Close
