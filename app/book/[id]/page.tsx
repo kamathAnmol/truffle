@@ -1,318 +1,286 @@
 "use client";
-interface citiesInterface {
-  city: string;
-  state: string;
-}
-export interface dateInterface {
-  date: string;
-  seats_booked: number;
-}
-export interface Timings {
-  time: string;
-  date: dateInterface[];
-}
-
-export interface moviesInterface {
-  movie: number;
-  time: Timings[];
-}
-export interface theatreInterface {
-  _id: string;
-  state: string;
-  city: string;
-  name: string;
-  timings: string[];
-  movies: moviesInterface[];
-  total_seats: number;
-}
-
-import React, { useEffect, useState } from "react";
-
+import { detailsType, fetchDetails, img_base_uri } from "@/app/api/fetchData";
+import TheatreCard from "@/app/components/theatre Card/theatreCard";
+import { clInterface } from "@/store/root-reducer";
 import {
   Button,
+  Card,
+  CardHeader,
+  Divider,
   Image,
-  Progress,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
   Select,
   SelectItem,
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  useDisclosure,
+  Switch,
 } from "@nextui-org/react";
+import { MapPin } from "lucide-react";
+import React, { useCallback, useEffect, useState } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
+interface cityInterface {
+  city: string;
+  state: string;
+}
 
-import {
-  CalendarIcon,
-  Calendar as CalenderIcon,
-  MapPin,
-  X,
-} from "lucide-react";
-import { detailsType, fetchDetails, img_base_uri } from "@/app/api/fetchData";
-import { clInterface } from "@/store/root-reducer";
-import TheatreCard from "@/app/components/theatre Card/theatreCard";
+export interface thetreInterface {
+  _id: string;
+  name: string;
+  city: string;
+  state: string;
+  timings: string[];
+  seats: { platinum: number; gold: number; silver: number };
+}
 
-const BookPage = ({ params }: { params: { id: string } }) => {
-  const [cities, setcities] = useState<citiesInterface[] | null>([]);
-  const [theatres, setTheatres] = useState<theatreInterface[]>([]);
-  const [details, setDetails] = useState<detailsType>();
-  const [img, setImg] = useState<string>("");
-  const id = params.id;
-
-  type dateValueInterface = Date | null;
-  type ValuePiece = Date | null;
-
-  type Value = ValuePiece | [ValuePiece, ValuePiece];
-  const [modalValue, setModalValue] = useState<Value>(new Date());
-
-  const [selected, setSelected] = useState<string>("Bengaluru,Karnataka");
-  const [cityState, setCityState] = useState<citiesInterface>({
-    city: "Bengaluru",
-    state: "Karnataka",
-  });
-  const [dateValue, dateOnChange] = useState<dateValueInterface>(new Date());
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
-
+const Book = ({ params }: { params: { id: string } }) => {
+  const { id } = params;
+  const [selectedCity, setSelectedCity] = useState<number>(0);
+  const [city, setCity] = useState<cityInterface>();
+  const [cities, setCities] = useState<cityInterface[]>([]);
+  const [useCurrent, setUseCurrent] = useState<boolean>(true);
+  const [movieDetails, setMovieDetials] = useState<detailsType>();
+  const [showCalender, setShowCalender] = useState<boolean>(false);
+  const [theatres, setTheatres] = useState<thetreInterface[]>([]);
+  const currentDate = new Date();
+  const [date, setdate] = useState<string>(
+    `${currentDate.getDate()}/${
+      currentDate.getMonth() + 1
+    }/${currentDate.getFullYear()}`
+  );
+  const [calenderDate, setCalenderDate] = useState<Date | null>(new Date());
+  const getLocation = useCallback(async () => {
+    const response = await fetch("https://ipapi.co/json/");
+    return await response.json();
+  }, []);
+  const fetchCities = useCallback(async () => {
+    try {
+      const response = await fetch("/api/getcities", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
+      const { data } = await response.json();
+      const cityData: cityInterface[] = data.cities;
+      const cityNames: string[] = [];
+      const cities: cityInterface[] = [];
+      cityData.map((city) => {
+        if (cityNames.includes(city.city)) return;
+        else {
+          cityNames.push(city.city);
+          cities.push(city);
+        }
+      });
+      setCities(cities);
+    } catch (error) {
+      console.error("Error fetching cities:", error);
+    }
+  }, []);
   useEffect(() => {
-    const getLoc = async () => {
-      if (selected === "location") {
-        const result = await fetch("https://ipapi.co/json/");
-        const location: clInterface = await result.json();
-        const { city, region } = location;
-        await setCityState({ city, state: region });
-        console.log(cityState);
+    fetchCities();
+  }, [fetchCities]);
+  useEffect(() => {
+    const getCity = async () => {
+      if (useCurrent) {
+        const location: clInterface = await getLocation();
+        setCity({ city: location.city!, state: location.region! });
+      } else {
+        const { city, state } = cities[selectedCity];
+        setCity({ city, state });
       }
     };
-    getLoc();
+    getCity();
+    // eslint-disable-next-line
+  }, [selectedCity, useCurrent]);
+  useEffect(() => {
+    const getMovieDetails = async () => {
+      const details = await fetchDetails("movie", id);
+      setMovieDetials(details);
+    };
+    getMovieDetails();
+  }, [id]);
+  useEffect(() => {
     const getTheatres = async () => {
       try {
-        const dateRequest = `${dateValue!.getDate()}/${
-          dateValue!.getMonth() + 1
-        }/${dateValue!.getFullYear()}`;
-        const { city, state } = cityState!;
         const response = await fetch("/api/gettheatres", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ city, state, dateRequest, id }),
+          body: JSON.stringify(city),
         });
         if (response.ok) {
-          const { data } = await response.json();
+          const data = await response.json();
           setTheatres(data.theatres);
-        } else {
-          console.error(
-            "Failed to fetch data:",
-            response.status,
-            response.statusText
-          );
-        }
+        } else console.log("error while Fetching");
       } catch (error) {
-        console.error("An error occurred:", error);
+        console.log("error while fetching", error);
       }
     };
     getTheatres();
-  }, [selected, dateValue, cityState, id]);
-  useEffect(() => {
-    const getCities = async () => {
-      try {
-        const response = await fetch("/api/getcities", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        if (response.ok) {
-          const { data } = await response.json();
-          const addedList: string[] = [];
-          const cityList: citiesInterface[] = [];
-          data.cities.map((cityObject: citiesInterface) => {
-            const { city } = cityObject;
-            if (addedList.includes(city)) return;
-            else {
-              addedList.push(city);
-              cityList.push(cityObject);
-            }
-          });
-          setcities(Array.from(cityList));
-        } else {
-          console.error(
-            "Failed to fetch data:",
-            response.status,
-            response.statusText
-          );
-        }
-      } catch (error) {
-        console.error("An error occurred:", error);
-      }
-    };
-    const getDetails = async () => {
-      const response = await fetchDetails("movie", id);
-      setDetails(response);
-    };
-
-    getCities();
-    getDetails();
-  }, [id]);
-  useEffect(() => {
-    setImg(details?.poster_path!);
-    console.log(details?.poster_path);
-  }, [details?.poster_path]);
+  }, [city]);
+  const changeDate = () => {
+    setdate(
+      `${calenderDate?.getDate()}/${
+        calenderDate?.getMonth()! + 1
+      }/${calenderDate?.getFullYear()}`
+    );
+    setShowCalender(false);
+  };
+  const maxDate = new Date(currentDate);
+  maxDate.setDate(currentDate.getDate() + 10);
   return (
     <div>
-      <div className="w-full p-4 flex justify-center gap-4 items-center fixed top-16 bg-black/60 backdrop-blur-lg border-y-gray z-50">
-        <Button
-          variant="bordered"
-          color="warning"
-          onPress={() => setSelected("location")}
-        >
-          <MapPin size={20} /> Use Current Location
-        </Button>
-        <Select
-          label="Select your City"
-          className="w-11/12 md:w-2/5"
-          size="sm"
-          variant="bordered"
-          value={selected}
-          onChange={(e) => {
-            setSelected(e.target.value);
-            const spilted = e.target.value.split(",");
-            setCityState({ city: spilted[0], state: spilted[1] });
-          }}
-          showScrollIndicators
-        >
-          {cities!.map(({ city, state }: citiesInterface) => {
-            return (
-              <SelectItem
-                value={`${city},${state}`}
-                key={`${city},${state}`}
-                startContent={
-                  <MapPin strokeWidth={0.5} color="#969696" size={20} />
-                }
-              >
-                {`${city}, ${state}`}
-              </SelectItem>
-            );
-          })}
-        </Select>
-        {selected !== null && (
-          <div className="absolute right-4 flex gap-2 items-end">
-            <div>
-              <h1 className="font-bold text-lg text-right  ">
-                {cityState?.city}
-              </h1>
-              <p className=" text-right text-gray-500">{cityState?.state}</p>
-            </div>
-            <MapPin size={50} strokeWidth={1} color="#003eb3"></MapPin>
+      <div>
+        <div className="w-2/3 mx-auto flex gap-4  items-center py-2 justify-center">
+          <div className="flex">
+            <Switch
+              defaultSelected
+              aria-label="Select Current Location"
+              onChange={() => setUseCurrent(!useCurrent)}
+              size="sm"
+            />
+            <p
+              className={`text-xs ${
+                useCurrent ? "" : "text-stone-600"
+              } text-clip w-2/4`}
+            >
+              Use Current Location
+            </p>
           </div>
-        )}
-        <div className=" fixed left-0  md:ml-8 mx-2 rounded-md top-[200%]  flex-col items-center hidden md:flex">
-          <div className="w-fit m-4 md:m-8 flex flex-col">
-            <Image
-              src={`${img_base_uri}${img}`}
-              alt=""
-              className="rounded-md w-fit max-h-60 md:max-h-80 xl:max-h-96 m-0"
-            ></Image>
-            <h1 className="w-3/4">{details?.title}</h1>
-            <div className="progress-wrapper w-2/3">
-              <Progress
-                size="sm"
-                aria-label="Loading..."
-                value={details?.vote_average! * 10}
-                showValueLabel={true}
-              />
+          {cities.length > 0 && (
+            <Select
+              label="select your City"
+              placeholder="Select City"
+              isDisabled={useCurrent}
+              size="sm"
+              className="w-2/3"
+              onChange={(e) => setSelectedCity(+e.target.value)}
+              value={`${cities[selectedCity!].city},${
+                cities[selectedCity!].state
+              }`}
+            >
+              {cities.map((city, index) => {
+                return (
+                  <SelectItem
+                    key={index}
+                  >{`${city.city},${city.state}`}</SelectItem>
+                );
+              })}
+            </Select>
+          )}
+          <div className="flex">
+            <MapPin size={50} strokeWidth={0.8} color="#0030b4" />
+            <div>
+              <h1 className="font-bold text-lg">{city?.city}</h1>
+              <p className="font-bold text-slate-300">{city?.state}</p>
             </div>
           </div>
         </div>
       </div>
-
-      <div className="relative mt-40 ">
-        <div className=" flex justify-between m-4 items-center  ml-96 mr-4">
-          {dateValue !== null && (
-            <h1 className="text-lg font-bold">{`${dateValue.getDate()}/${
-              dateValue.getMonth() + 1
-            }/${dateValue.getFullYear()}`}</h1>
-          )}
-          <div className="flex gap-3 items-center">
-            <h1>Select Date:</h1>
-            <Button
-              onPress={() => dateOnChange(new Date())}
-              variant="bordered"
-              color="primary"
-              size="md"
-            >
-              Today
-            </Button>
-            <Button
-              variant="bordered"
-              color="primary"
-              size="md"
-              onPress={() => {
-                const tomorrow = new Date();
-                tomorrow.setDate(tomorrow.getDate() + 1);
-                dateOnChange(tomorrow);
-              }}
-            >
-              Tomorrow
-            </Button>
-            <Button color="primary" onPress={onOpen}>
-              Select Date <CalendarIcon />
-            </Button>
+      <Divider />
+      <div className="grid grid-cols-11">
+        <Card className=" col-span-2 mx-4">
+          <CardHeader className="flex flex-col items-start">
+            <p>
+              {movieDetails?.title} <small>{movieDetails?.release_date}</small>
+            </p>
+            <p>{movieDetails?.original_language}</p>
+          </CardHeader>
+          <Image
+            removeWrapper
+            alt="Card background"
+            className="z-0 w-full h-full object-cover"
+            src={`${img_base_uri}${movieDetails?.poster_path}`}
+          ></Image>
+        </Card>
+        <div className="col-span-9">
+          <div className="flex justify-between w-full items-center my-2">
+            <h1>
+              Selected Date : <b>{date}</b>
+            </h1>
+            <div className="flex gap-2">
+              <Button
+                variant="ghost"
+                color="primary"
+                onPress={() => {
+                  setdate(
+                    `${currentDate.getDate()}/${
+                      currentDate.getMonth() + 1
+                    }/${currentDate.getFullYear()}`
+                  );
+                }}
+              >
+                Today
+              </Button>
+              <Button
+                variant="ghost"
+                color="primary"
+                onPress={() => {
+                  setdate(
+                    `${currentDate.getDate() + 1}/${
+                      currentDate.getMonth() + 1
+                    }/${currentDate.getFullYear()}`
+                  );
+                }}
+              >
+                Tomorrow
+              </Button>
+              <Button
+                variant="shadow"
+                color="primary"
+                onPress={() => setShowCalender(true)}
+              >
+                Select Date
+              </Button>
+            </div>
           </div>
-        </div>
-        {theatres.length > 0 ? (
-          <div className="ml-96 mr-4 grid gap-4">
-            {theatres.map((item) => (
+          <div className="flex flex-col gap-2">
+            {theatres.map((theatre) => (
               <TheatreCard
-                item={item}
-                date={`${dateValue!.getDate()}/${
-                  dateValue!.getMonth() + 1
-                }/${dateValue!.getFullYear()}`}
-                key={item._id}
+                key={theatre._id}
+                item={theatre}
+                date={date}
+                movie={id}
               />
             ))}
           </div>
-        ) : (
-          <h1 className=" font-bold text-4xl text-center my-96">
-            No Theaters in Your City
-          </h1>
-        )}
+        </div>
       </div>
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="sm">
+      <Modal
+        isOpen={showCalender}
+        onOpenChange={() => setShowCalender(false)}
+        backdrop="blur"
+        size="sm"
+      >
         <ModalContent>
-          {(onClose) => (
-            <>
-              <ModalHeader className="flex flex-col gap-1">
-                Select Date
-              </ModalHeader>
-              <ModalBody>
-                <p>
-                  Selected Date: {modalValue?.toLocaleString().split(",")[0]}
-                </p>
-                <Calendar value={modalValue} onChange={setModalValue} />
-              </ModalBody>
-              <ModalFooter>
-                <Button color="danger" variant="light" onPress={onClose}>
-                  Close
-                </Button>
-                <Button
-                  color="primary"
-                  onPress={() => {
-                    dateOnChange(modalValue as dateValueInterface);
-                    onClose();
-                  }}
-                >
-                  Select Date
-                </Button>
-              </ModalFooter>
-            </>
-          )}
+          <ModalHeader>Select Date</ModalHeader>
+          <ModalBody>
+            Selected Date : {calenderDate?.toDateString()}
+            <Calendar
+              onChange={(v, e) => setCalenderDate(v as Date)}
+              value={calenderDate}
+              maxDate={maxDate}
+              minDate={currentDate}
+            />
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              color="danger"
+              variant="flat"
+              onPress={() => setShowCalender(false)}
+            >
+              Close
+            </Button>
+            <Button color="primary" variant="shadow" onPress={changeDate}>
+              Select
+            </Button>
+          </ModalFooter>
         </ModalContent>
       </Modal>
     </div>
   );
 };
 
-export default BookPage;
+export default Book;

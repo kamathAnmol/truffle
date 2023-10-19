@@ -2,17 +2,17 @@ import { bookingModel } from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 
 export const POST = async (req: NextRequest) => {
-  const { user } = await req.json();
+  const { data } = await req.json();
   try {
-    const result = await bookingModel.find({ user: user });
-
+    const newDoc = new bookingModel({ ...data });
+    newDoc.save();
     return NextResponse.json(
-      { message: "Bookings Fooound", data: result },
+      { message: "booking Updated", data: await newDoc },
       { status: 201 }
     );
   } catch (error) {
     return NextResponse.json(
-      { Message: "error while Getting Bookings", error },
+      { message: "error while updating booking ", error },
       { status: 401 }
     );
   }

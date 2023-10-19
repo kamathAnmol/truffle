@@ -40,28 +40,13 @@ export const watchListModel =
   mongoose.model("truffleWatchList", watchListSchema);
 
 //theatre Schema
-const dateSchema = new mongoose.Schema({
-  date: {
-    type: String,
-  },
-  seats_booked: {
-    type: Number,
-  },
+
+const seats = new mongoose.Schema({
+  platinum: Number,
+  gold: Number,
+  silver: Number,
 });
 
-const timingSchema = new mongoose.Schema({
-  time: {
-    type: String,
-  },
-  date: [dateSchema],
-});
-
-const movieSchema = new mongoose.Schema({
-  movie: {
-    type: Number,
-  },
-  time: [timingSchema],
-});
 const theatreSchema = new mongoose.Schema({
   state: {
     type: String,
@@ -76,43 +61,49 @@ const theatreSchema = new mongoose.Schema({
     required: true,
   },
   timings: [{ type: String }],
-  movies: [movieSchema],
-  total_seats: {
-    type: Number,
-    required: true,
-  },
+  seats: seats,
 });
 
 export const theatreModel =
   mongoose.models.truffletheatres ||
   mongoose.model("truffletheatres", theatreSchema);
 
-const timeSchema = new mongoose.Schema({
-  show_time: {
-    type: String,
-    required: true,
-  },
-  show_date: {
-    type: String,
-    required: true,
-  },
+//shows Schema
+const seatsSchema = new mongoose.Schema({
+  silver: [String],
+  gold: [String],
+  platinum: [String],
 });
+const showsSchema = new mongoose.Schema({
+  theatre: String,
+  movie: String,
+  date: String,
+  time: String,
+  booked_seats: seatsSchema,
+});
+
+export const showsModal =
+  mongoose.models.truffleShows || mongoose.model("truffleShows", showsSchema);
+
+//booking schema
+
 const bookingSchema = new mongoose.Schema({
-  uid: {
+  user: {
     type: String,
     required: true,
   },
-  movie_id: {
+  movie: {
     type: Number,
     required: true,
   },
-  theatre_id: {
+  show: {
     type: String,
     required: true,
   },
-  time: timeSchema,
+  time: String,
+  date: String,
   seats: {
-    type: Number,
+    type: seatsSchema,
   },
 });
 

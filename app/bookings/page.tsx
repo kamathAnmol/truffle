@@ -4,16 +4,16 @@ import { selectCurrentUser } from "@/store/root-reducer";
 import { Tab, Tabs } from "@nextui-org/react";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { bookingInterface } from "../api/updateBookings/route";
 import { fetchDetails } from "../api/fetchData";
 import BookingsCard from "../components/bookingsCard/bookingsCard";
+import { bookInterface } from "../components/theatre Card/theatreCard";
 
 type Props = {};
 
 const BookingPage = (props: Props) => {
   const uid = useSelector(selectCurrentUser);
-  const [upComing, setUpcoming] = useState<bookingInterface[]>();
-  const [old, setOld] = useState<bookingInterface[]>();
+  const [upComing, setUpcoming] = useState<bookInterface[]>();
+  const [old, setOld] = useState<bookInterface[]>();
 
   useEffect(() => {
     const oldBooking = (date: string, time: string): boolean => {
@@ -30,15 +30,16 @@ const BookingPage = (props: Props) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(uid),
+        body: JSON.stringify({ user: uid }),
       });
       if (response.ok) {
-        const data = await response.json();
-        const bookings: bookingInterface[] = data.bookings;
-        const oldBookings: bookingInterface[] = [];
-        const upcomingBookings: bookingInterface[] = [];
+        const { data } = await response.json();
+        const bookings: bookInterface[] = data;
+        console.log();
+        const oldBookings: bookInterface[] = [];
+        const upcomingBookings: bookInterface[] = [];
         bookings.map((booking) => {
-          if (oldBooking(booking.time.show_date, booking.time.show_time)) {
+          if (oldBooking(booking.date, booking.time)) {
             oldBookings.push(booking);
           } else {
             upcomingBookings.push(booking);
@@ -46,15 +47,15 @@ const BookingPage = (props: Props) => {
         });
         setOld(
           oldBookings.sort((a, b) => {
-            const dateA = new Date(a.time.show_date + " " + a.time.show_time);
-            const dateB = new Date(b.time.show_date + " " + b.time.show_time);
+            const dateA = new Date(a.date + " " + a.time);
+            const dateB = new Date(b.date + " " + b.time);
             return dateA.getTime() - dateB.getTime();
           })
         );
         setUpcoming(
           upcomingBookings.sort((a, b) => {
-            const dateA = new Date(a.time.show_date + " " + a.time.show_time);
-            const dateB = new Date(b.time.show_date + " " + b.time.show_time);
+            const dateA = new Date(a.date + " " + a.time);
+            const dateB = new Date(b.date + " " + b.time);
             return dateA.getTime() - dateB.getTime();
           })
         );
@@ -72,7 +73,7 @@ const BookingPage = (props: Props) => {
           {upComing?.length! > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {upComing?.map((item) => (
-                <BookingsCard item={item} key={item.seats}></BookingsCard>
+                <BookingsCard item={item} key={item._id}></BookingsCard>
               ))}
             </div>
           ) : (
@@ -85,7 +86,7 @@ const BookingPage = (props: Props) => {
           {old?.length! > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {old?.map((item) => (
-                <BookingsCard item={item} key={item.seats}></BookingsCard>
+                <BookingsCard item={item} key={item._id}></BookingsCard>
               ))}
             </div>
           ) : (
